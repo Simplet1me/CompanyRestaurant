@@ -1,0 +1,7 @@
+/* 全局基础样式（组件样式统一走 MUI theme/sx，此处仅保留必需项） */
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}

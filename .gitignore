@@ -32,3 +32,6 @@ build/
 .vscode/
 
 docs/CLAUDE.md
+
+# 本地隐私配置（数据库账号密码等，不入库）
+src/main/resources/application-local.yml

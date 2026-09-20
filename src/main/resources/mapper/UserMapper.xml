@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simplet1me.companyrestaurant.mapper.UserMapper">
+
+    <resultMap id="userMap" type="com.simplet1me.companyrestaurant.entity.User">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="login_name" property="loginName"/>
+        <result column="password" property="password"/>
+        <result column="phone" property="phone"/>
+        <result column="department" property="department"/>
+        <result column="workstation" property="workstation"/>
+        <result column="role" property="role"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="findById" resultMap="userMap">
+        SELECT id, name, login_name, password, phone, department, workstation, role, create_time, update_time
+        FROM `user`
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByLoginName" resultMap="userMap">
+        SELECT id, name, login_name, password, phone, department, workstation, role, create_time, update_time
+        FROM `user`
+        WHERE login_name = #{loginName}
+    </select>
+
+    <insert id="insert" parameterType="com.simplet1me.companyrestaurant.entity.User"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `user` (name, login_name, password, phone, department, workstation, role)
+        VALUES (#{name}, #{loginName}, #{password}, #{phone}, #{department}, #{workstation}, #{role})
+    </insert>
+
+    <update id="updatePassword">
+        UPDATE `user`
+        SET password = #{password}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

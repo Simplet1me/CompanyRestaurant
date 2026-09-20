@@ -1,33 +1,16 @@
-# 企业餐厅网络点餐系统 - 数据库建表命令
+DROP DATABASE IF EXISTS company_restaurant;
 
-> **数据库有变动时必须更新本文档。** 表设计说明见 `design.md` §5，需求依据见 `requirements.md`。
-> 环境：MySQL 8.x，字符集 utf8mb4。以下 SQL 可整段复制到 MySQL 客户端执行。
-> 项目内另有一键清除重置脚本 `reset-db.bat`（调用 `db/reset.sql`，会删除并重建本库），该脚本与本文档建表内容保持一致。
-
-```sql
--- ============================================================
--- 企业餐厅网络点餐系统 建库建表脚本
--- 环境：MySQL 8.x
--- ============================================================
-
--- ------------------------------------------------------------
--- 1. 建库
--- ------------------------------------------------------------
-CREATE DATABASE IF NOT EXISTS company_restaurant
+CREATE DATABASE company_restaurant
     DEFAULT CHARACTER SET utf8mb4
     DEFAULT COLLATE utf8mb4_general_ci;
 
 USE company_restaurant;
 
--- ------------------------------------------------------------
--- 2.1 user 用户表
--- 登录名唯一；密码存 BCrypt 密文；角色 MANAGER/CHEF/DELIVERER/FINANCE/EMPLOYEE
--- ------------------------------------------------------------
 CREATE TABLE `user` (
     `id`          BIGINT       NOT NULL AUTO_INCREMENT COMMENT '主键',
     `name`        VARCHAR(50)  NOT NULL                COMMENT '姓名',
     `login_name`  VARCHAR(50)  NOT NULL                COMMENT '登录名（唯一）',
-    `password`    VARCHAR(100) NOT NULL                COMMENT '密码（SHA-256 加盐散列，64 位十六进制）',
+    `password`    VARCHAR(100) NOT NULL                COMMENT '密码（SHA-256 加盐散列）',
     `phone`       VARCHAR(20)  NOT NULL                COMMENT '联系电话（送餐用）',
     `department`  VARCHAR(50)  DEFAULT NULL            COMMENT '工作单位（部门）',
     `workstation` VARCHAR(100) NOT NULL                COMMENT '工位信息（送餐用）',
@@ -38,9 +21,6 @@ CREATE TABLE `user` (
     UNIQUE KEY `uk_login_name` (`login_name`)
 ) ENGINE = InnoDB COMMENT = '用户表';
 
--- ------------------------------------------------------------
--- 2.2 recipe 食谱表（菜品库，菜单的数据来源）
--- ------------------------------------------------------------
 CREATE TABLE `recipe` (
     `id`          BIGINT        NOT NULL AUTO_INCREMENT COMMENT '菜品系统 id',
     `name`        VARCHAR(100)  NOT NULL                COMMENT '菜肴名称',
@@ -54,10 +34,6 @@ CREATE TABLE `recipe` (
     KEY `idx_classify` (`classify`)
 ) ENGINE = InnoDB COMMENT = '食谱表（菜品库，菜单的数据来源）';
 
--- ------------------------------------------------------------
--- 2.3 menu 菜单表
--- 同一时刻仅一份 USE（使用中），由业务层保证；历史菜单留存可复用
--- ------------------------------------------------------------
 CREATE TABLE `menu` (
     `id`          BIGINT       NOT NULL AUTO_INCREMENT COMMENT '菜单编号',
     `name`        VARCHAR(100) NOT NULL                COMMENT '菜单名字（每次创建独立命名）',
@@ -67,10 +43,6 @@ CREATE TABLE `menu` (
     KEY `idx_status` (`status`)
 ) ENGINE = InnoDB COMMENT = '菜单表（同一时刻仅一份 USE，由业务层保证）';
 
--- ------------------------------------------------------------
--- 2.4 menu_items 菜单菜品表（快照）
--- 创建菜单时从 recipe 快照复制，此后与食谱解耦；价格可独立修改
--- ------------------------------------------------------------
 CREATE TABLE `menu_items` (
     `id`          BIGINT        NOT NULL AUTO_INCREMENT COMMENT '菜单项 id',
     `menu_id`     BIGINT        NOT NULL                COMMENT '所属菜单 id',
@@ -85,10 +57,6 @@ CREATE TABLE `menu_items` (
     KEY `idx_menu_id` (`menu_id`)
 ) ENGINE = InnoDB COMMENT = '菜单菜品表（创建菜单时从 recipe 快照复制，此后与食谱解耦）';
 
--- ------------------------------------------------------------
--- 2.5 orders 订单表
--- (user_id, meal_date) 唯一：每个员工每个用餐日期一张订单
--- ------------------------------------------------------------
 CREATE TABLE `orders` (
     `id`          BIGINT        NOT NULL AUTO_INCREMENT COMMENT '订单 id',
     `user_id`     BIGINT        NOT NULL                COMMENT '下单用户 id',
@@ -104,10 +72,6 @@ CREATE TABLE `orders` (
     KEY `idx_meal_date_status` (`meal_date`, `status`)
 ) ENGINE = InnoDB COMMENT = '订单表（每个员工每个用餐日期一张订单）';
 
--- ------------------------------------------------------------
--- 2.6 order_items 订单明细表（快照）
--- 下单时从 menu_items 快照复制，此后与菜单解耦；amount = 单价 × 分量
--- ------------------------------------------------------------
 CREATE TABLE `order_items` (
     `id`           BIGINT        NOT NULL AUTO_INCREMENT COMMENT '明细 id',
     `order_id`     BIGINT        NOT NULL                COMMENT '所属订单 id',
@@ -121,11 +85,6 @@ CREATE TABLE `order_items` (
     KEY `idx_order_id` (`order_id`)
 ) ENGINE = InnoDB COMMENT = '订单明细表（下单时从 menu_items 快照复制，此后与菜单解耦）';
 
--- ------------------------------------------------------------
--- 2.7 system_config 系统配置表（key-value）
--- 初始应包含：order_deadline（订餐截止时间，默认 09:00）
---           serve_start_time（配餐开始时间，默认 11:30，须晚于截止时间）
--- ------------------------------------------------------------
 CREATE TABLE `system_config` (
     `id`           BIGINT       NOT NULL AUTO_INCREMENT COMMENT '主键',
     `config_key`   VARCHAR(50)  NOT NULL                COMMENT '配置键',
@@ -135,15 +94,3 @@ CREATE TABLE `system_config` (
     PRIMARY KEY (`id`),
     UNIQUE KEY `uk_config_key` (`config_key`)
 ) ENGINE = InnoDB COMMENT = '系统配置表（key-value）';
-
--- ============================================================
--- 建表脚本结束
--- ============================================================
-```
-
-## 设计说明
-
-- **逻辑外键**：所有表不建物理外键约束。快照表（menu_items / order_items）必须与源表解耦——食谱菜品可删除，而快照必须留存，这正是需求"删除或修改食谱菜式不影响已有菜单与订单"的实现基础。
-- **快照溯源字段**：`menu_items.recipe_id`、`order_items.menu_item_id` 仅用于追溯来源，不参与业务逻辑，源记录删除后置空或保留原值均可。
-- **订单唯一性**：`uk_user_meal (user_id, meal_date)` 保证每个员工每个用餐日期至多一张订单。经理删除订单为物理删除，删除后员工可在订餐窗口内重新下单。
-- **菜单唯一使用中**：MySQL 无法用唯一索引表达"至多一行 status='USE'"，由业务层在启用菜单事务中保证（见 design.md §6.7）。
