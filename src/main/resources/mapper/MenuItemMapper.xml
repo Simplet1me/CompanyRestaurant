@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simplet1me.companyrestaurant.mapper.MenuItemMapper">
+
+    <resultMap id="menuItemMap" type="com.simplet1me.companyrestaurant.entity.MenuItem">
+        <id column="id" property="id"/>
+        <result column="menu_id" property="menuId"/>
+        <result column="recipe_id" property="recipeId"/>
+        <result column="name" property="name"/>
+        <result column="photo" property="photo"/>
+        <result column="unit" property="unit"/>
+        <result column="classify" property="classify"/>
+        <result column="price" property="price"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <sql id="baseColumns">
+        id, menu_id, recipe_id, name, photo, unit, classify, price, create_time
+    </sql>
+
+    <select id="findByMenuId" resultMap="menuItemMap">
+        SELECT <include refid="baseColumns"/>
+        FROM menu_items
+        WHERE menu_id = #{menuId}
+        ORDER BY id
+    </select>
+
+    <select id="findByMenuIds" resultMap="menuItemMap">
+        SELECT <include refid="baseColumns"/>
+        FROM menu_items
+        WHERE menu_id IN
+        <foreach collection="menuIds" item="menuId" open="(" separator="," close=")">
+            #{menuId}
+        </foreach>
+        ORDER BY id
+    </select>
+
+    <select id="findById" resultMap="menuItemMap">
+        SELECT <include refid="baseColumns"/>
+        FROM menu_items
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insertBatch">
+        INSERT INTO menu_items (menu_id, recipe_id, name, photo, unit, classify, price)
+        VALUES
+        <foreach collection="items" item="item" separator=",">
+            (#{item.menuId}, #{item.recipeId}, #{item.name}, #{item.photo},
+             #{item.unit}, #{item.classify}, #{item.price})
+        </foreach>
+    </insert>
+
+    <update id="updatePrice">
+        UPDATE menu_items SET price = #{price} WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM menu_items WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteByMenuId">
+        DELETE FROM menu_items WHERE menu_id = #{menuId}
+    </delete>
+
+</mapper>

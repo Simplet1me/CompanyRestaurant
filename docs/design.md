@@ -49,7 +49,8 @@ com.simplet1me.companyrestaurant
 ├── config/                                  # 配置
 │   └── WebConfig.java                       # 拦截器注册、CORS（允许携带 Cookie）
 ├── interceptor/                             # 拦截器（课程选做项）
-│   └── LoginInterceptor.java                # 登录校验：Session 无用户 → 401（权限拦截器随模块推进加入）
+│   ├── LoginInterceptor.java                # 登录校验：Session 无用户 → 401
+│   └── RoleInterceptor.java                 # 权限校验：@RequireRole 声明的角色不满足 → 403
 ├── controller/                              # REST 控制器（只做参数接收/校验/返回，不含业务）
 │   └── AuthController.java                  # 登录/注册/登出/当前用户/修改密码
 ├── service/ + service/impl/                 # 业务层（事务边界、业务规则）
@@ -67,19 +68,21 @@ com.simplet1me.companyrestaurant
 
 | # | 模块 | 内容（接口数） | 对应包 |
 |---|---|---|---|
-| M1 | 认证与会话 ✅已完成 | 登录/注册/登出/当前用户/修改密码（5）；Session+Cookie、BCrypt、登录拦截器 | auth + interceptor + common |
-| M2 | 用户管理 | 用户 CRUD、重置密码（6，经理） | user |
-| M3 | 用户批量导入 | Excel 批量导入（1，经理）；EasyExcel 读 + 文件上传 | user |
-| M4 | 文件服务 | 图片上传至 MinIO、文件访问（2） | file + utils |
-| M5 | 食谱管理 | 食谱 CRUD + 批量删除（6，经理/厨房主管） | recipe |
-| M6 | 菜单管理 | 菜单列表/当前/创建/详情/删除/启用（6，经理） | menu |
-| M7 | 菜单菜品管理 | 向菜单加菜、修改价格、删除菜品（3，经理） | menu |
-| M8 | 点餐下单 | 订餐状态、下单（时间窗口判定+三层快照）、我的订单（3，所有角色） | order |
-| M9 | 订单管理 | 按日查询、详情、经理删单（3，经理/配餐员） | order |
-| M10 | 总括订单与配餐 | 总括订单汇总（厨房主管）、配餐批量订单（配餐员）（2） | order |
-| M11 | 月度销售统计 | 月度销售总报表查询 + Excel 导出（2，经理/财务） | report |
-| M12 | 员工与个人报表 | 员工月度订单汇总、个人月度消费统计/订单汇总及导出（6） | report |
-| M13 | 系统配置 | 订餐截止/配餐开始时间查询与修改（2，经理） | config |
+| M1 | 认证与会话 ✅ | 登录/注册/登出/当前用户/修改密码（5）；Session+Cookie、SHA-256、登录拦截器 | auth + interceptor + common |
+| M2 | 用户管理 ✅ | 用户 CRUD、重置密码（6，经理） | user |
+| M3 | 用户批量导入 ⚠️TODO | Excel 批量导入（1，经理）；EasyExcel 读 + 文件上传，未实现 | user |
+| M4 | 文件服务 ⚠️TODO | 图片上传至 MinIO（MinioOssUtil 已有封装）、文件访问（2），未实现 | file + utils |
+| M5 | 食谱管理 ✅ | 食谱 CRUD + 批量删除（6，经理/厨房主管） | recipe |
+| M6 | 菜单管理 ✅ | 菜单列表/当前/创建/详情/删除/启用（6，经理） | menu |
+| M7 | 菜单菜品管理 ✅ | 向菜单加菜、修改价格、删除菜品（3，经理） | menu |
+| M8 | 点餐下单 ✅ | 订餐状态、下单（时间窗口判定+三层快照）、我的订单（3，所有角色） | order |
+| M9 | 订单管理 ✅ | 按日查询、详情、经理删单（3，经理/配餐员） | order |
+| M10 | 总括订单与配餐 ✅ | 总括订单汇总（厨房主管）、配餐批量订单（配餐员）（2） | order |
+| M11 | 月度销售统计 ✅（导出TODO） | 月度销售总报表查询（1，经理/财务）；Excel 导出未实现 | report |
+| M12 | 员工与个人报表 ✅（导出TODO） | 员工月度订单汇总、个人月度消费统计/订单汇总（3）；导出（3）未实现 | report |
+| M13 | 系统配置 ✅ | 订餐截止/配餐开始时间查询与修改（2，经理） | config |
+
+实现状态：47 个接口中 38 个已实现并冒烟测试通过，9 个 TODO（批量导入 1、文件服务 2、报表导出 4、占位 2）。
 
 **4 人分工建议**（按技术相关性聚合，接口数相对均衡）：
 
@@ -140,7 +143,7 @@ recipe ──< menu_items ──< menu 关系：menu 1─N menu_items
 - 登录成功：`HttpSession` 存入 `LoginUserVO`（id、登录名、姓名、角色），响应头自动携带 `Set-Cookie: JSESSIONID=...`。
 - 自助注册（公开接口）：角色固定 `EMPLOYEE`，密码 SHA-256 加盐散列入库（PasswordUtil），注册成功即建立会话（同登录）。
 - 每次请求：`LoginInterceptor` 从 Session 取用户校验登录态；无会话返回 401（登录、注册接口在拦截器排除清单中）。
-- 角色权限拦截器（`RoleInterceptor` + `@RequireRole`）在用户管理/食谱等模块实现时加入。
+- 角色权限：`RoleInterceptor` 读取 Controller 方法上的 `@RequireRole` 校验角色，不满足返回 403；未标注的方法任何登录用户可访问（任何角色都拥有普通员工权限）。
 - 登出：`session.invalidate()`。
 - 前端配合：Ajax 需开启 `withCredentials`（fetch 为 `credentials: 'include'`），CORS 不允许 `*` 通配（见 6.3）。
 - Cookie 进阶使用（选做）：登录接口可选 `rememberMe` 参数，勾选后额外签发 7 天有效期的随机 token 存 Cookie + 服务端表/内存，用于会话过期后的自动登录。
@@ -151,7 +154,7 @@ recipe ──< menu_items ──< menu 关系：menu 1─N menu_items
 - `allowCredentials(true)` + `allowedOriginPatterns("*")`（携带 Cookie 时不能用 `allowedOrigins("*")`），暴露 `Content-Disposition` 响应头（下载文件名）；生产环境收紧为具体前端域名。
 - 配置载体为 application.yml，可按环境切换。
 
-### 6.4 文件上传/下载（课程必做：编程实现）
+### 6.4 文件上传/下载（课程必做：编程实现）⚠️ 本模块未实现（TODO）
 
 **上传（两类）**：
 
@@ -259,8 +262,8 @@ GET /api/reports/monthly?month=2026-09
 |---|---|---|
 | 数据库增删查改 | 全模块 MyBatis CRUD | §3、§5 |
 | session 和 cookie | HttpSession 登录态 + JSESSIONID Cookie（+ rememberMe 选做） | §6.2 |
-| 编程实现文件上传 | 菜品图片上传 / 用户 Excel 导入 | §6.4 |
-| 编程实现文件下载 | 报表 Excel 导出下载 | §6.4 |
+| 编程实现文件上传 | 菜品图片上传 / 用户 Excel 导入 | §6.4（⚠️ 未实现 TODO） |
+| 编程实现文件下载 | 报表 Excel 导出下载 | §6.4（⚠️ 未实现 TODO） |
 | Spring 拦截器（选做） | LoginInterceptor + RoleInterceptor | §6.2 |
 | web 过滤器（选做） | CorsFilter / 编码过滤器 | §6.3 |
 | 前端 ajax（选做） | 纯 REST API 设计，前端全程 Ajax | §2 |

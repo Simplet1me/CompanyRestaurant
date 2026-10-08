@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simplet1me.companyrestaurant.mapper.MenuMapper">
+
+    <resultMap id="menuMap" type="com.simplet1me.companyrestaurant.entity.Menu">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <select id="pageList" resultMap="menuMap">
+        SELECT id, name, status, create_time
+        FROM menu
+        ORDER BY id DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="countAll" resultType="long">
+        SELECT COUNT(*) FROM menu
+    </select>
+
+    <select id="findById" resultMap="menuMap">
+        SELECT id, name, status, create_time
+        FROM menu
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByStatus" resultMap="menuMap">
+        SELECT id, name, status, create_time
+        FROM menu
+        WHERE status = #{status}
+        ORDER BY id DESC
+        LIMIT 1
+    </select>
+
+    <insert id="insert" parameterType="com.simplet1me.companyrestaurant.entity.Menu"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO menu (name, status)
+        VALUES (#{name}, #{status})
+    </insert>
+
+    <delete id="deleteById">
+        DELETE FROM menu WHERE id = #{id}
+    </delete>
+
+    <update id="updateStatusWhereUse">
+        UPDATE menu SET status = #{status} WHERE status = 'USE'
+    </update>
+
+    <update id="updateStatusById">
+        UPDATE menu SET status = #{status} WHERE id = #{id}
+    </update>
+
+</mapper>

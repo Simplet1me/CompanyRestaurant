@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simplet1me.companyrestaurant.mapper.OrderItemMapper">
+
+    <resultMap id="orderItemMap" type="com.simplet1me.companyrestaurant.entity.OrderItem">
+        <id column="id" property="id"/>
+        <result column="order_id" property="orderId"/>
+        <result column="menu_item_id" property="menuItemId"/>
+        <result column="name" property="name"/>
+        <result column="unit" property="unit"/>
+        <result column="price" property="price"/>
+        <result column="qty" property="qty"/>
+        <result column="amount" property="amount"/>
+    </resultMap>
+
+    <select id="findByOrderId" resultMap="orderItemMap">
+        SELECT id, order_id, menu_item_id, name, unit, price, qty, amount
+        FROM order_items
+        WHERE order_id = #{orderId}
+        ORDER BY id
+    </select>
+
+    <select id="findByOrderIds" resultMap="orderItemMap">
+        SELECT id, order_id, menu_item_id, name, unit, price, qty, amount
+        FROM order_items
+        WHERE order_id IN
+        <foreach collection="orderIds" item="orderId" open="(" separator="," close=")">
+            #{orderId}
+        </foreach>
+        ORDER BY id
+    </select>
+
+    <insert id="insertBatch">
+        INSERT INTO order_items (order_id, menu_item_id, name, unit, price, qty, amount)
+        VALUES
+        <foreach collection="items" item="item" separator=",">
+            (#{item.orderId}, #{item.menuItemId}, #{item.name}, #{item.unit},
+             #{item.price}, #{item.qty}, #{item.amount})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByOrderId">
+        DELETE FROM order_items WHERE order_id = #{orderId}
+    </delete>
+
+    <!-- 按用餐日期区间聚合（userId 可选）：按 菜名+单位 分组，已取消订单不计入 -->
+    <select id="sumGroupBy" resultType="com.simplet1me.companyrestaurant.model.vo.ReportItemVO">
+        SELECT oi.name AS name,
+               oi.unit AS unit,
+               SUM(oi.qty)    AS totalQty,
+               SUM(oi.amount) AS totalAmount
+        FROM order_items oi
+        JOIN orders o ON oi.order_id = o.id
+        WHERE o.status = 'VALID'
+          AND o.meal_date BETWEEN #{start} AND #{end}
+        <if test="userId != null">
+            AND o.user_id = #{userId}
+        </if>
+        GROUP BY oi.name, oi.unit
+        ORDER BY totalAmount DESC
+    </select>
+
+</mapper>

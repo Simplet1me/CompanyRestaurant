@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simplet1me.companyrestaurant.mapper.OrderMapper">
+
+    <resultMap id="orderMap" type="com.simplet1me.companyrestaurant.entity.Order">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="emp_name" property="empName"/>
+        <result column="phone" property="phone"/>
+        <result column="workstation" property="workstation"/>
+        <result column="meal_date" property="mealDate"/>
+        <result column="status" property="status"/>
+        <result column="total_price" property="totalPrice"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <sql id="baseColumns">
+        id, user_id, emp_name, phone, workstation, meal_date, status, total_price, create_time
+    </sql>
+
+    <select id="findById" resultMap="orderMap">
+        SELECT <include refid="baseColumns"/>
+        FROM orders
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByUserIdAndMealDate" resultMap="orderMap">
+        SELECT <include refid="baseColumns"/>
+        FROM orders
+        WHERE user_id = #{userId} AND meal_date = #{mealDate}
+    </select>
+
+    <select id="pageList" resultMap="orderMap">
+        SELECT <include refid="baseColumns"/>
+        FROM orders
+        <where>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="mealDate != null">
+                AND meal_date = #{mealDate}
+            </if>
+        </where>
+        ORDER BY id DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="countByCond" resultType="long">
+        SELECT COUNT(*)
+        FROM orders
+        <where>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="mealDate != null">
+                AND meal_date = #{mealDate}
+            </if>
+        </where>
+    </select>
+
+    <select id="findByMealDateRange" resultMap="orderMap">
+        SELECT <include refid="baseColumns"/>
+        FROM orders
+        WHERE meal_date BETWEEN #{start} AND #{end}
+        <if test="userId != null">
+            AND user_id = #{userId}
+        </if>
+        ORDER BY meal_date, id
+    </select>
+
+    <select id="countValidByUserId" resultType="long">
+        SELECT COUNT(*)
+        FROM orders
+        WHERE user_id = #{userId} AND status = 'VALID'
+    </select>
+
+    <select id="findByMealDate" resultMap="orderMap">
+        SELECT <include refid="baseColumns"/>
+        FROM orders
+        WHERE meal_date = #{mealDate}
+        ORDER BY id
+    </select>
+
+    <insert id="insert" parameterType="com.simplet1me.companyrestaurant.entity.Order"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO orders (user_id, emp_name, phone, workstation, meal_date, status, total_price)
+        VALUES (#{userId}, #{empName}, #{phone}, #{workstation}, #{mealDate}, #{status}, #{totalPrice})
+    </insert>
+
+    <delete id="deleteById">
+        DELETE FROM orders WHERE id = #{id}
+    </delete>
+
+</mapper>

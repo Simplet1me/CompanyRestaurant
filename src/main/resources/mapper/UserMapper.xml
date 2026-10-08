@@ -33,6 +33,54 @@
         VALUES (#{name}, #{loginName}, #{password}, #{phone}, #{department}, #{workstation}, #{role})
     </insert>
 
+    <select id="pageList" resultMap="userMap">
+        SELECT id, name, login_name, password, phone, department, workstation, role, create_time, update_time
+        FROM `user`
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (name LIKE CONCAT('%', #{keyword}, '%') OR login_name LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+            <if test="role != null and role != ''">
+                AND role = #{role}
+            </if>
+            <if test="department != null and department != ''">
+                AND department LIKE CONCAT('%', #{department}, '%')
+            </if>
+        </where>
+        ORDER BY id DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="countByCond" resultType="long">
+        SELECT COUNT(*)
+        FROM `user`
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (name LIKE CONCAT('%', #{keyword}, '%') OR login_name LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+            <if test="role != null and role != ''">
+                AND role = #{role}
+            </if>
+            <if test="department != null and department != ''">
+                AND department LIKE CONCAT('%', #{department}, '%')
+            </if>
+        </where>
+    </select>
+
+    <update id="update" parameterType="com.simplet1me.companyrestaurant.entity.User">
+        UPDATE `user`
+        SET name = #{name},
+            phone = #{phone},
+            department = #{department},
+            workstation = #{workstation},
+            role = #{role}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM `user` WHERE id = #{id}
+    </delete>
+
     <update id="updatePassword">
         UPDATE `user`
         SET password = #{password}

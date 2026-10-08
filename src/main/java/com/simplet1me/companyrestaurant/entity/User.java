@@ -1,5 +1,6 @@
 package com.simplet1me.companyrestaurant.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -19,7 +20,7 @@ public class User {
     /** 登录名（唯一） */
     private String loginName;
 
-    /** 密码（BCrypt 密文） */
+    /** 密码（SHA-256 加盐散列） */
     private String password;
 
     /** 联系电话（送餐用） */
@@ -35,8 +36,10 @@ public class User {
     private String role;
 
     /** 创建时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
 
     /** 更新时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
 }

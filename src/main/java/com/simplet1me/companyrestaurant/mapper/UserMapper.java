@@ -3,6 +3,8 @@ package com.simplet1me.companyrestaurant.mapper;
 import com.simplet1me.companyrestaurant.entity.User;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 用户表 Mapper（由启动类 @MapperScan 扫描注册）
  */
@@ -19,9 +21,29 @@ public interface UserMapper {
     User findByLoginName(@Param("loginName") String loginName);
 
     /**
+     * 分页查询（keyword 姓名/登录名模糊，role 精确，department 模糊）
+     */
+    List<User> pageList(@Param("keyword") String keyword, @Param("role") String role,
+                        @Param("department") String department,
+                        @Param("offset") int offset, @Param("size") int size);
+
+    long countByCond(@Param("keyword") String keyword, @Param("role") String role,
+                     @Param("department") String department);
+
+    /**
      * 新增用户（id 回填）
      */
     int insert(User user);
+
+    /**
+     * 修改用户信息（不含密码）
+     */
+    int update(User user);
+
+    /**
+     * 删除用户
+     */
+    int deleteById(@Param("id") Long id);
 
     /**
      * 修改密码

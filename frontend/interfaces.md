@@ -200,7 +200,7 @@
 
 请求体：`{ "newPassword": "888888" }`。响应：`data: null`。
 
-### 2.7 批量导入用户（文件上传）
+### 2.7 批量导入用户（文件上传）　⚠️ 未实现（TODO）
 
 `POST /api/users/import`　权限：MANAGER
 
@@ -227,7 +227,7 @@
 
 ## 3. 文件 File
 
-### 3.1 上传图片（菜品图片）
+### 3.1 上传图片（菜品图片）　⚠️ 未实现（TODO）
 
 `POST /api/files/upload/image`　权限：登录即可（实际用于食谱/菜单编辑界面）
 
@@ -241,7 +241,7 @@
 
 `url` 存入食谱/菜单的 `photo` 字段；前端拼接域名即可访问（GET 静态资源）。
 
-### 3.2 图片访问（静态资源）
+### 3.2 图片访问（MinIO URL）　⚠️ 未实现（TODO，随 3.1 上传实现）
 
 `GET /uploads/**`　无需认证
 
@@ -544,7 +544,7 @@
 - 按用餐日期归属月份，已取消订单不计入。
 - 单价为加权平均（totalAmount ÷ totalQty）。
 
-### 7.2 月度销售统计总报表导出
+### 7.2 月度销售统计总报表导出　⚠️ 未实现（TODO）
 
 `GET /api/reports/monthly/export?month=2026-09`　权限：MANAGER、FINANCE
 
@@ -570,7 +570,7 @@
 }
 ```
 
-### 7.4 员工月度订单汇总表导出
+### 7.4 员工月度订单汇总表导出　⚠️ 未实现（TODO）
 
 `GET /api/reports/employee/{userId}/export?month=2026-09`　权限：MANAGER、FINANCE
 
@@ -593,7 +593,7 @@
 }
 ```
 
-### 7.6 个人月度消费统计汇总表导出
+### 7.6 个人月度消费统计汇总表导出　⚠️ 未实现（TODO）
 
 `GET /api/reports/mine/monthly/export?month=2026-09`　权限：登录即可
 
@@ -605,7 +605,7 @@
 
 响应 data 结构同 7.3。
 
-### 7.8 个人月度订单汇总表导出
+### 7.8 个人月度订单汇总表导出　⚠️ 未实现（TODO）
 
 `GET /api/reports/mine/orders/export?month=2026-09`　权限：登录即可
 

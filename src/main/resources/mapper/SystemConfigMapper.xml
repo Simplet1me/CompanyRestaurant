@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simplet1me.companyrestaurant.mapper.SystemConfigMapper">
+
+    <resultMap id="configMap" type="com.simplet1me.companyrestaurant.entity.SystemConfig">
+        <id column="id" property="id"/>
+        <result column="config_key" property="configKey"/>
+        <result column="config_value" property="configValue"/>
+        <result column="description" property="description"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="findByKey" resultMap="configMap">
+        SELECT id, config_key, config_value, description, update_time
+        FROM system_config
+        WHERE config_key = #{configKey}
+    </select>
+
+    <insert id="upsert">
+        INSERT INTO system_config (config_key, config_value, description)
+        VALUES (#{configKey}, #{configValue}, #{description})
+        ON DUPLICATE KEY UPDATE config_value = VALUES(config_value), description = VALUES(description)
+    </insert>
+
+</mapper>
