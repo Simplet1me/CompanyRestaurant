@@ -5,3 +5,23 @@ body,
   height: 100%;
   margin: 0;
 }
+
+/* 打印样式：总括订单、配餐打印等页面仅打印 #print-area 区域 */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #print-area,
+  #print-area * {
+    visibility: visible;
+  }
+  #print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  .no-print {
+    display: none !important;
+  }
+}

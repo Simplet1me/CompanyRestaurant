@@ -70,4 +70,9 @@ export const http = {
     unwrap(instance.delete<ApiResponse<T>>(url, config)),
 }
 
+/** 提取错误信息用于页面展示 */
+export function errMessage(err: unknown, fallback = '操作失败，请稍后重试'): string {
+  return err instanceof Error ? err.message : fallback
+}
+
 export default instance
