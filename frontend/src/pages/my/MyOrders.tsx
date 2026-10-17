@@ -28,7 +28,7 @@ import type { Order } from '@/types/order'
 import { formatMoney } from '@/utils/format'
 import { errMessage } from '@/utils/request'
 
-/** 我的订单（interfaces.md §6.3） */
+
 export default function MyOrdersPage() {
   const { snackbar, showError } = useSnackbar()
   const [mealDate, setMealDate] = useState<Dayjs | null>(null)

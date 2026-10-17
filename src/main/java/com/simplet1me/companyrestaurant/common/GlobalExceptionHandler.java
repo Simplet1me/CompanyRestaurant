@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(org.springframework.web.multipart.MaxUploadSizeExceededException.class)
+    public Result<Void> handleUploadSize(Exception e) {
+        return Result.error(ResultCode.BAD_REQUEST, "上传文件过大，Excel最大10MB，图片最大5MB");
+    }
 
     /** 业务异常 */
     @ExceptionHandler(BusinessException.class)

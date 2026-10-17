@@ -13,7 +13,6 @@ import {
   TableHead,
   TableRow,
   Tabs,
-  Tooltip,
   Typography,
 } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
@@ -25,8 +24,9 @@ import { useSnackbar } from '@/hooks/useSnackbar'
 import type { EmployeeMonthlyReport, PersonalMonthlyReport } from '@/types/report'
 import { formatMoney } from '@/utils/format'
 import { errMessage } from '@/utils/request'
+import { downloadExcel } from '@/api/file'
 
-/** 我的统计（interfaces.md §7.5 个人月度消费统计 / §7.7 个人月度订单汇总） */
+
 export default function MyReportsPage() {
   const { snackbar, showError } = useSnackbar()
   const [month, setMonth] = useState<Dayjs | null>(dayjs())
@@ -34,6 +34,7 @@ export default function MyReportsPage() {
   const [monthly, setMonthly] = useState<PersonalMonthlyReport | null>(null)
   const [ordersReport, setOrdersReport] = useState<EmployeeMonthlyReport | null>(null)
   const [loading, setLoading] = useState(false)
+  const [exporting, setExporting] = useState(false)
 
   const load = useCallback(() => {
     if (!month) return
@@ -52,16 +53,16 @@ export default function MyReportsPage() {
     load()
   }, [load])
 
-  const exportDisabled = (
-    // TODO: 报表导出接口后端未实现（interfaces.md §7.6/§7.8），实现后启用
-    <Tooltip title="报表导出后端未实现（TODO）">
-      <span>
-        <Button size="small" variant="outlined" disabled>
-          导出 Excel
-        </Button>
-      </span>
-    </Tooltip>
-  )
+  const handleExport = async () => {
+    if (!month?.isValid()) return
+    setExporting(true)
+    try {
+      const path = tab === 0 ? '/reports/mine/monthly/export' : '/reports/mine/orders/export'
+      const title = tab === 0 ? '个人月度消费统计汇总表' : '个人月度订单汇总表'
+      await downloadExcel(path, `${title}_${month.format('YYYY-MM')}`, { month: month.format('YYYY-MM') })
+    } catch (e) { showError(errMessage(e)) }
+    finally { setExporting(false) }
+  }
 
   return (
     <Box>
@@ -75,7 +76,9 @@ export default function MyReportsPage() {
           onChange={setMonth}
           slotProps={{ textField: { size: 'small' } }}
         />
-        {exportDisabled}
+        <Button size="small" variant="outlined" onClick={handleExport} disabled={exporting || !month?.isValid()}>
+          {exporting ? '正在导出…' : '导出 Excel'}
+        </Button>
       </Stack>
 
       <Tabs value={tab} onChange={(_, v: number) => setTab(v)} sx={{ mb: 2 }}>

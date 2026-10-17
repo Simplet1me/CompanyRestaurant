@@ -1,3 +1,5 @@
+> 更新：用户Excel导入、模板下载、MinIO图片上传/访问和四类Excel导出已完成。以下原设计中的TODO说明为历史记录，当前实现与验收方式以 `file-features.md` 和 `interfaces.md` 为准。
+
 # 企业餐厅网络点餐系统 - 答辩文档
 
 > 系统简介见 §0，测试演示见 `test_steps.md`，完整设计见 `design.md`。

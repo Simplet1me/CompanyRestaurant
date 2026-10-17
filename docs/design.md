@@ -1,3 +1,5 @@
+> 更新：用户Excel导入、模板下载、MinIO图片上传/访问和四类Excel导出已完成。以下原设计中的TODO说明为历史记录，当前实现与验收方式以 `file-features.md` 和 `interfaces.md` 为准。
+
 # 企业餐厅网络点餐系统 - 系统架构设计
 
 > 架构有变动时必须更新本文档；接口契约见 `interfaces.md`，建表语句见 `sql.md`，需求依据见 `requirements.md`。

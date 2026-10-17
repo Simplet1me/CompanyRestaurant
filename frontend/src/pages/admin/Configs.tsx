@@ -8,7 +8,7 @@ import { useAuth } from '@/context/AuthContext'
 import { useSnackbar } from '@/hooks/useSnackbar'
 import { errMessage } from '@/utils/request'
 
-/** 系统配置（interfaces.md §8）：订餐截止时间 / 配餐开始时间，修改仅 MANAGER */
+
 export default function ConfigsPage() {
   const { user } = useAuth()
   const isManager = user?.role === 'MANAGER'

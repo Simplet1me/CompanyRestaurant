@@ -23,7 +23,7 @@ import type { User } from '@/types/common'
 
 type Mode = 'login' | 'register'
 
-/** 登录 / 自助注册页（interfaces.md §1.1、§1.2），结构参考官方 Sign-in/Sign-up 模板 */
+
 export default function LoginPage() {
   const { user, setUser } = useAuth()
   const navigate = useNavigate()
@@ -62,7 +62,7 @@ export default function LoginPage() {
         p: 2,
         justifyContent: 'center',
         alignItems: 'center',
-        // 官方 Sign-in 模板风格的渐变背景
+
         backgroundImage:
           'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
         backgroundRepeat: 'no-repeat',
@@ -100,7 +100,7 @@ export default function LoginPage() {
         ) : (
           <RegisterForm loading={loading} onSubmit={(params) => run(() => register(params))} />
         )}
-        {/* 官方模板的底部切换链接 */}
+
         <Typography align="center" variant="body2" color="text.secondary">
           {mode === 'login' ? '没有账号？' : '已有账号？'}{' '}
           <Link

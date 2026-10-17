@@ -45,7 +45,7 @@ import type { Recipe } from '@/types/recipe'
 import { formatMoney } from '@/utils/format'
 import { errMessage } from '@/utils/request'
 
-/** 菜单管理（interfaces.md §5）权限：MANAGER */
+
 export default function MenusPage() {
   const { snackbar, showError, showSuccess } = useSnackbar()
   const [data, setData] = useState<PageResult<MenuSummary>>({ total: 0, list: [] })
@@ -206,7 +206,7 @@ export default function MenusPage() {
   )
 }
 
-/** 创建菜单弹窗（interfaces.md §5.3） */
+
 function CreateMenuDialog({
   open,
   onClose,
@@ -330,7 +330,7 @@ function RecipePicker({ selected, onChange }: { selected: number[]; onChange: (i
   )
 }
 
-/** 菜单详情弹窗（interfaces.md §5.4/§5.5/§5.6/§5.7）：管理菜单菜品 */
+
 function MenuDetailDialog({
   menuId,
   onClose,

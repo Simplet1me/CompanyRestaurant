@@ -22,7 +22,7 @@ export interface NavItem {
   roles?: Role[]
 }
 
-/** 侧边导航配置（权限矩阵见 ../docs/requirements.md §2） */
+
 export const NAV_ITEMS: NavItem[] = [
   { label: '点餐', path: '/', icon: <RestaurantMenu /> },
   { label: '我的订单', path: '/my/orders', icon: <ReceiptLong /> },

@@ -17,7 +17,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
 
-  // 启动时恢复登录态（interfaces.md §1.4）；未登录时由请求层兜底跳登录页
   useEffect(() => {
     me()
       .then(setUser)

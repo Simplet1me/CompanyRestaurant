@@ -10,6 +10,10 @@ import com.simplet1me.companyrestaurant.model.dto.UserUpdateDTO;
 import com.simplet1me.companyrestaurant.model.vo.LoginUserVO;
 import com.simplet1me.companyrestaurant.model.vo.UserVO;
 import com.simplet1me.companyrestaurant.service.UserService;
+import com.simplet1me.companyrestaurant.service.UserImportService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
 import com.simplet1me.companyrestaurant.utils.SessionUtil;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -26,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 用户管理接口（餐厅经理）。
- * TODO 2.7 批量导入用户（Excel 上传）暂未实现，待文件上传模块完成后补充。
  */
 @RestController
 @RequestMapping("/api/users")
@@ -34,6 +37,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
+    private final UserImportService userImportService;
+
+    @GetMapping("/import/template")
+    @RequireRole(Role.MANAGER)
+    public ResponseEntity<byte[]> importTemplate() throws IOException {
+        return userImportService.template();
+    }
+
+    @PostMapping("/import")
+    @RequireRole(Role.MANAGER)
+    public Result<UserImportService.ImportResult> importUsers(@RequestParam("file") MultipartFile file) {
+        return Result.success(userImportService.importUsers(file));
+    }
 
     /** 用户列表（分页） */
     @GetMapping

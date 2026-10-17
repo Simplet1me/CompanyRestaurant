@@ -24,13 +24,14 @@ import { useCallback, useEffect, useState } from 'react'
 import type { ChangeEvent, FormEvent } from 'react'
 import { batchDeleteRecipes, createRecipe, deleteRecipe, listRecipes, updateRecipe } from '@/api/recipe'
 import ConfirmDialog from '@/components/ConfirmDialog'
+import ImageUpload from '@/components/ImageUpload'
 import { useSnackbar } from '@/hooks/useSnackbar'
 import type { PageResult } from '@/types/common'
 import type { Recipe } from '@/types/recipe'
 import { formatMoney } from '@/utils/format'
 import { errMessage } from '@/utils/request'
 
-/** 食谱管理（interfaces.md §4）权限：MANAGER、CHEF */
+
 export default function RecipesPage() {
   const { snackbar, showError, showSuccess } = useSnackbar()
   const [filters, setFilters] = useState({ keyword: '', classify: '' })
@@ -279,7 +280,7 @@ interface RecipeFormState {
   photo: string
 }
 
-/** 新增/编辑菜品弹窗（interfaces.md §4.2/§4.4） */
+
 function RecipeFormDialog({
   editing,
   onClose,
@@ -300,6 +301,7 @@ function RecipeFormDialog({
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [submitting, setSubmitting] = useState(false)
+  const [uploading, setUploading] = useState(false)
 
   const setField = (field: keyof RecipeFormState) => (e: ChangeEvent<HTMLInputElement>) =>
     setForm((p) => ({ ...p, [field]: e.target.value }))
@@ -319,7 +321,7 @@ function RecipeFormDialog({
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    if (!validate()) return
+    if (uploading || submitting || !validate()) return
     setSubmitting(true)
     try {
       const payload = {
@@ -343,7 +345,7 @@ function RecipeFormDialog({
   }
 
   return (
-    <Dialog open onClose={onClose} maxWidth="sm" fullWidth>
+    <Dialog open onClose={uploading || submitting ? undefined : onClose} maxWidth="sm" fullWidth>
       <Box component="form" onSubmit={handleSubmit}>
         <DialogTitle>{isCreate ? '新增菜品' : `编辑菜品：${editing.name}`}</DialogTitle>
         <DialogContent>
@@ -364,21 +366,15 @@ function RecipeFormDialog({
               fullWidth
               required
             />
-            {/* TODO: 图片上传接口后端未实现（interfaces.md §3.1），实现后改为上传组件 */}
-            <TextField
-              label="菜品图片 URL（选填）"
-              value={form.photo}
-              onChange={setField('photo')}
-              helperText="图片上传后端未实现，暂可填写图片 URL"
-              fullWidth
-            />
+            <ImageUpload value={form.photo} onChange={(photo) => setForm((p) => ({ ...p, photo }))}
+              onBusyChange={setUploading} onError={showError} disabled={submitting} />
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} disabled={submitting}>
+          <Button onClick={onClose} disabled={submitting || uploading}>
             取消
           </Button>
-          <Button type="submit" variant="contained" disabled={submitting}>
+          <Button type="submit" variant="contained" disabled={submitting || uploading}>
             {submitting ? <CircularProgress size={24} color="inherit" /> : '保存'}
           </Button>
         </DialogActions>

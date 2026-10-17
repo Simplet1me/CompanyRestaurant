@@ -64,7 +64,7 @@ INSERT INTO `user` (name, login_name, password, phone, department, workstation, 
 | T2.8 | 删除刚注册的 tester99（无订单） | 删除成功，列表消失 |
 | T2.9 | 删除自己（liuming） | 提示"不能删除自己" |
 | T2.10 | 删除 zhangwei（有有效订单时） | 提示"该用户存在有效订单，不允许删除" |
-| T2.11 | 批量导入（Excel） | ⚠️ 该功能 TODO 未实现，前端按钮暂不可用 |
+| T2.11 | 批量导入（Excel） | 下载含示例的模板，在用户数据表填写后上传，显示成功数和失败行原因 |
 
 ### T3 食谱管理（经理/厨房主管）
 
@@ -124,7 +124,7 @@ INSERT INTO `user` (name, login_name, password, phone, department, workstation, 
 | T7.3 | liuming 选择员工 zhangwei 查看月度订单汇总 | 列出该员工当月每天订单及月合计金额 |
 | T7.4 | zhangwei 查看个人月度消费统计 | 按菜品分组的消费明细 + 合计金额 |
 | T7.5 | zhangwei 查看个人月度订单汇总 | 当月全部订单列表 |
-| T7.6 | 各报表点"导出 Excel" | ⚠️ TODO 未实现，按钮暂不可用 |
+| T7.6 | 各报表点"导出 Excel" | 下载所选月份/员工的xlsx文件，金额及明细与查询一致 |
 | T7.7 | chef01 尝试访问统计报表 | 403（只有经理/财务有权限） |
 
 ### T8 系统配置（经理）

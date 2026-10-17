@@ -29,7 +29,7 @@ import type { Order, OrderStatus } from '@/types/order'
 import { formatMoney } from '@/utils/format'
 import { errMessage } from '@/utils/request'
 
-/** 点餐首页（interfaces.md §5.2 + §6.1 + §6.2）：当前菜单点餐 */
+
 export default function HomePage() {
   const { snackbar, showError } = useSnackbar()
   const [status, setStatus] = useState<OrderStatus | null>(null)

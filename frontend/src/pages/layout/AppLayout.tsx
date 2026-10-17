@@ -31,7 +31,7 @@ import { ROLE_LABELS } from '@/utils/constants'
 
 const DRAWER_WIDTH = 240
 
-/** 侧边栏品牌区（官方 Dashboard 模板结构） */
+
 function BrandHeader() {
   return (
     <>
@@ -48,22 +48,18 @@ function BrandHeader() {
   )
 }
 
-/**
- * 应用主布局，结构参考官方 Dashboard 模板：
- * 左侧 Aside（桌面端永久抽屉 / 移动端临时抽屉）+ 右侧主列（Header + 内容 + Footer）
- */
+
 export default function AppLayout() {
   const { user, setUser } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const theme = useTheme()
-  // 官方 Responsive drawer 模式：桌面端 permanent，移动端 temporary
+
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'))
   const [mobileOpen, setMobileOpen] = useState(false)
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null)
   const [loggingOut, setLoggingOut] = useState(false)
 
-  // 按角色过滤导航（权限矩阵见 requirements.md §2）
   const visibleItems = NAV_ITEMS.filter((item) => !item.roles || (user && item.roles.includes(user.role)))
 
   // Header 标题跟随当前页面
@@ -144,7 +140,7 @@ export default function AppLayout() {
 
       {/* 主列：Header + 内容 + Footer */}
       <Box component="main" sx={{ flexGrow: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
-        {/* Header：sticky 顶栏，风格参考官方模板（底部描边分隔） */}
+
         <AppBar
           position="sticky"
           elevation={0}
@@ -169,7 +165,7 @@ export default function AppLayout() {
               <Typography variant="body2" sx={{ fontWeight: 600 }}>{user?.name}</Typography>
               <Typography variant="caption" color="text.secondary">{user && ROLE_LABELS[user.role]}</Typography>
             </Box>
-            {/* 官方 App bar with menu 模式：头像按钮 + 下拉菜单 */}
+
             <Tooltip title={user?.name ?? ''}>
               <IconButton
                 size="small"

@@ -1,6 +1,6 @@
 import type { PageQuery } from './common'
 
-/** 当前订餐状态（interfaces.md §6.1） */
+
 export interface OrderStatus {
   canOrder: boolean
   /** 若可订，本次订单对应的用餐日期 */
@@ -11,7 +11,7 @@ export interface OrderStatus {
   reason: string | null
 }
 
-/** 订单明细（interfaces.md §6.2 items 元素） */
+
 export interface OrderItem {
   id: number
   name: string
@@ -21,7 +21,7 @@ export interface OrderItem {
   amount: number
 }
 
-/** 订单（interfaces.md §6.2） */
+
 export interface Order {
   id: number
   mealDate: string
@@ -34,19 +34,19 @@ export interface Order {
   items: OrderItem[]
 }
 
-/** 下单请求（interfaces.md §6.2 请求体） */
+
 export interface CreateOrderParams {
   items: { menuItemId: number; qty: number }[]
 }
 
-/** 总括订单（interfaces.md §6.7） */
+
 export interface BlanketOrder {
   mealDate: string
   totalEmployeeCount: number
   items: { name: string; unit: string; totalQty: number }[]
 }
 
-/** 配餐批量查询（interfaces.md §6.8） */
+
 export interface DeliveryOrder {
   mealDate: string
   orders: {
@@ -58,7 +58,7 @@ export interface DeliveryOrder {
   }[]
 }
 
-/** 订单分页查询参数（interfaces.md §6.3/§6.4） */
+
 export interface OrderQuery extends PageQuery {
   /** 按用餐日期精确查询（可选） */
   mealDate?: string

@@ -200,7 +200,7 @@
 
 请求体：`{ "newPassword": "888888" }`。响应：`data: null`。
 
-### 2.7 批量导入用户（文件上传）　⚠️ 未实现（TODO）
+### 2.7 批量导入用户（文件上传）
 
 `POST /api/users/import`　权限：MANAGER
 
@@ -208,16 +208,18 @@
 
 模板列（第一行为表头）：
 
-| 姓名 | 登录名 | 密码 | 联系电话 | 工作单位 | 工位信息 | 角色 |
+| 姓名 | 登录名 | 密码 | 联系电话 | 部门 | 工位信息 | 角色 |
 |---|---|---|---|---|---|---|
 | 张伟 | zhangwei | 123456 | 13900001111 | 研发部 | A栋502 | EMPLOYEE |
 
-角色列填写 §0.5 枚举值，留空默认 EMPLOYEE。
+角色列必填，使用 MANAGER / CHEF / DELIVERER / FINANCE / EMPLOYEE。
+
+模板下载：`GET /api/users/import/template`，仅 MANAGER 可用。模板含“用户数据”“填写示例”“填写说明”三个工作表，仅导入“用户数据”；每次最多1000行，公式不支持。
 
 响应 data：
 
 ```json
-{ "successCount": 10, "failCount": 1, "failDetails": [ { "row": 5, "reason": "登录名已存在" } ] }
+{ "successCount": 10, "failureCount": 1, "failures": [ { "row": 5, "reason": "登录名已存在" } ] }
 ```
 
 - 任一行校验失败则该行不导入，其余行正常导入；
@@ -227,25 +229,25 @@
 
 ## 3. 文件 File
 
-### 3.1 上传图片（菜品图片）　⚠️ 未实现（TODO）
+### 3.1 上传图片（菜品图片）
 
-`POST /api/files/upload/image`　权限：登录即可（实际用于食谱/菜单编辑界面）
+`POST /api/files/upload/image`　权限：MANAGER、CHEF
 
 `multipart/form-data`，字段 `file`（jpg/jpeg/png/gif/webp，≤5MB）。
 
 响应 data：
 
 ```json
-{ "url": "/uploads/image/202609/uuid1234.jpg" }
+{ "url": "/uploads/image/550e8400-e29b-41d4-a716-446655440000.jpeg" }
 ```
 
 `url` 存入食谱/菜单的 `photo` 字段；前端拼接域名即可访问（GET 静态资源）。
 
-### 3.2 图片访问（MinIO URL）　⚠️ 未实现（TODO，随 3.1 上传实现）
+### 3.2 图片访问（MinIO URL）
 
-`GET /uploads/**`　无需认证
+`GET /uploads/image/{name}`　无需认证
 
-磁盘目录映射，浏览器缓存 30 天。
+后端读取 MinIO 私有桶 `company-restaurant` 的 `images/` 对象，浏览器缓存30天；不需要修改桶的公开访问策略。
 
 ---
 
@@ -544,11 +546,13 @@
 - 按用餐日期归属月份，已取消订单不计入。
 - 单价为加权平均（totalAmount ÷ totalQty）。
 
-### 7.2 月度销售统计总报表导出　⚠️ 未实现（TODO）
+### 7.2 月度销售统计总报表导出
 
 `GET /api/reports/monthly/export?month=2026-09`　权限：MANAGER、FINANCE
 
 响应：Excel 文件流（下载）。文件名如 `月度销售统计总报表_2026-09.xlsx`。
+
+报表员工搜索：`GET /api/reports/employees?keyword=张`，权限 MANAGER、FINANCE，返回最多100条分页结构用户信息（不含密码）。
 
 ### 7.3 员工月度订单汇总表
 
@@ -570,7 +574,7 @@
 }
 ```
 
-### 7.4 员工月度订单汇总表导出　⚠️ 未实现（TODO）
+### 7.4 员工月度订单汇总表导出
 
 `GET /api/reports/employee/{userId}/export?month=2026-09`　权限：MANAGER、FINANCE
 
@@ -593,7 +597,7 @@
 }
 ```
 
-### 7.6 个人月度消费统计汇总表导出　⚠️ 未实现（TODO）
+### 7.6 个人月度消费统计汇总表导出
 
 `GET /api/reports/mine/monthly/export?month=2026-09`　权限：登录即可
 
@@ -605,7 +609,7 @@
 
 响应 data 结构同 7.3。
 
-### 7.8 个人月度订单汇总表导出　⚠️ 未实现（TODO）
+### 7.8 个人月度订单汇总表导出
 
 `GET /api/reports/mine/orders/export?month=2026-09`　权限：登录即可
 

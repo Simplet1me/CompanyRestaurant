@@ -16,7 +16,7 @@ public class RecipeDTO {
     @NotBlank(message = "菜肴名称不能为空")
     private String name;
 
-    /** 菜品图片 URL（上传功能 TODO，可先填外链） */
+    /** 菜品图片地址 */
     private String photo;
 
     @NotBlank(message = "计量单位不能为空")

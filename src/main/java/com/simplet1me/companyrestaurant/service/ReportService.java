@@ -7,7 +7,6 @@ import com.simplet1me.companyrestaurant.model.vo.MonthlyReportVO;
 /**
  * 统计报表服务。
  * 统计口径：按用餐日期归属月份，已取消订单不计入；单价为加权平均（金额合计÷分量合计）。
- * TODO 报表导出 Excel（EasyExcel）暂未实现。
  */
 public interface ReportService {
 

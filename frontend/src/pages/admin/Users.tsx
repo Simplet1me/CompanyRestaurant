@@ -19,20 +19,20 @@ import {
   TablePagination,
   TableRow,
   TextField,
-  Tooltip,
   Typography,
 } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 import type { ChangeEvent, FormEvent } from 'react'
 import { createUser, deleteUser, listUsers, resetUserPassword, updateUser } from '@/api/user'
 import ConfirmDialog from '@/components/ConfirmDialog'
+import UserImportDialog from '@/components/UserImportDialog'
 import { useSnackbar } from '@/hooks/useSnackbar'
 import type { PageResult } from '@/types/common'
 import type { UserItem } from '@/types/user'
 import { ROLE_LABELS } from '@/utils/constants'
 import { errMessage } from '@/utils/request'
 
-/** 用户管理（interfaces.md §2）权限：MANAGER */
+
 export default function UsersPage() {
   const { snackbar, showError, showSuccess } = useSnackbar()
   const [filters, setFilters] = useState({ keyword: '', role: '', department: '' })
@@ -44,6 +44,7 @@ export default function UsersPage() {
   const [resetTarget, setResetTarget] = useState<UserItem | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<UserItem | null>(null)
   const [deleting, setDeleting] = useState(false)
+  const [importOpen, setImportOpen] = useState(false)
 
   const load = useCallback(() => {
     setLoading(true)
@@ -112,19 +113,15 @@ export default function UsersPage() {
           sx={{ width: 140 }}
         />
         <Box sx={{ flexGrow: 1 }} />
-        {/* TODO: 批量导入接口后端未实现（interfaces.md §2.7），实现后启用 */}
-        <Tooltip title="批量导入后端未实现（TODO）">
-          <span>
-            <Button variant="outlined" size="small" startIcon={<UploadIcon />} disabled>
-              批量导入
-            </Button>
-          </span>
-        </Tooltip>
+        <Button variant="outlined" size="small" startIcon={<UploadIcon />} onClick={() => setImportOpen(true)}>
+          批量导入
+        </Button>
         <Button variant="contained" size="small" onClick={() => setEditing('new')}>
           新增用户
         </Button>
       </Stack>
 
+      {importOpen && <UserImportDialog onClose={() => setImportOpen(false)} onImported={load} />}
       <TableContainer component={Paper}>
         <Table size="small">
           <TableHead>
@@ -237,7 +234,7 @@ interface UserFormState {
   role: string
 }
 
-/** 新增/编辑用户弹窗（interfaces.md §2.2/§2.4） */
+
 function UserFormDialog({
   editing,
   onClose,
@@ -348,7 +345,7 @@ function UserFormDialog({
   )
 }
 
-/** 重置用户密码弹窗（interfaces.md §2.6） */
+
 function ResetPasswordDialog({
   userItem,
   onClose,

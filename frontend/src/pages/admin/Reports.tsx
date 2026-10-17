@@ -14,7 +14,6 @@ import {
   TableRow,
   Tabs,
   TextField,
-  Tooltip,
   Typography,
 } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
@@ -22,14 +21,15 @@ import dayjs from 'dayjs'
 import type { Dayjs } from 'dayjs'
 import { useCallback, useEffect, useState } from 'react'
 import { getEmployeeMonthlyReport, getMonthlyReport } from '@/api/report'
-import { listUsers } from '@/api/user'
 import { useSnackbar } from '@/hooks/useSnackbar'
 import type { EmployeeMonthlyReport, MonthlyReport } from '@/types/report'
 import type { UserItem } from '@/types/user'
 import { formatMoney } from '@/utils/format'
-import { errMessage } from '@/utils/request'
+import { errMessage, http } from '@/utils/request'
+import type { PageResult } from '@/types/common'
+import { downloadExcel } from '@/api/file'
 
-/** 统计报表（interfaces.md §7.1/§7.3）权限：MANAGER、FINANCE */
+
 export default function ReportsPage() {
   const { snackbar, showError } = useSnackbar()
   const [month, setMonth] = useState<Dayjs | null>(dayjs())
@@ -37,16 +37,22 @@ export default function ReportsPage() {
   const [monthly, setMonthly] = useState<MonthlyReport | null>(null)
   const [loading, setLoading] = useState(false)
   const [employees, setEmployees] = useState<UserItem[]>([])
-  const [employeeId, setEmployeeId] = useState<number | null>(null)
+  const [employeeSearch, setEmployeeSearch] = useState('')
+  const [selectedEmployee, setSelectedEmployee] = useState<UserItem | null>(null)
+  const employeeId = selectedEmployee?.id ?? null
   const [employeeReport, setEmployeeReport] = useState<EmployeeMonthlyReport | null>(null)
   const [employeeLoading, setEmployeeLoading] = useState(false)
+  const [exporting, setExporting] = useState(false)
 
-  // 员工下拉数据（报表页直接拉前 100 个用户）
   useEffect(() => {
-    listUsers({ pageNum: 1, pageSize: 100 })
-      .then((res) => setEmployees(res.list))
-      .catch(() => {})
-  }, [])
+    let active = true
+    const timer = window.setTimeout(() => {
+      http.get<PageResult<UserItem>>('/reports/employees', { keyword: employeeSearch })
+        .then((res) => { if (active) setEmployees(res.list) })
+        .catch((e) => { if (active) showError(errMessage(e)) })
+    }, 250)
+    return () => { active = false; window.clearTimeout(timer) }
+  }, [employeeSearch, showError])
 
   const loadMonthly = useCallback(() => {
     if (!month) return
@@ -78,16 +84,16 @@ export default function ReportsPage() {
     loadEmployee()
   }, [loadEmployee])
 
-  // TODO: 报表导出接口后端未实现（interfaces.md §7.2/§7.4），实现后启用
-  const exportDisabled = (
-    <Tooltip title="报表导出后端未实现（TODO）">
-      <span>
-        <Button size="small" variant="outlined" disabled>
-          导出 Excel
-        </Button>
-      </span>
-    </Tooltip>
-  )
+  const handleExport = async () => {
+    if (!month?.isValid() || (tab === 1 && employeeId == null)) return
+    setExporting(true)
+    try {
+      const path = tab === 0 ? '/reports/monthly/export' : `/reports/employee/${employeeId}/export`
+      const title = tab === 0 ? '月度销售统计总报表' : `员工月度订单汇总表_${employeeReport?.employee.name ?? employeeId}`
+      await downloadExcel(path, `${title}_${month.format('YYYY-MM')}`, { month: month.format('YYYY-MM') })
+    } catch (e) { showError(errMessage(e)) }
+    finally { setExporting(false) }
+  }
 
   return (
     <Box>
@@ -101,7 +107,10 @@ export default function ReportsPage() {
           onChange={setMonth}
           slotProps={{ textField: { size: 'small' } }}
         />
-        {exportDisabled}
+        <Button size="small" variant="outlined" onClick={handleExport}
+          disabled={exporting || !month?.isValid() || (tab === 1 && employeeId == null)}>
+          {exporting ? '正在导出…' : '导出 Excel'}
+        </Button>
       </Stack>
 
       <Tabs value={tab} onChange={(_, v: number) => setTab(v)} sx={{ mb: 2 }}>
@@ -156,9 +165,12 @@ export default function ReportsPage() {
         <Stack spacing={2}>
           <Autocomplete
             options={employees}
+            filterOptions={(options) => options}
+            onInputChange={(_, value, reason) => { if (reason === 'input' || reason === 'clear') setEmployeeSearch(value) }}
+            isOptionEqualToValue={(a, b) => a.id === b.id}
             getOptionLabel={(u) => `${u.name}（${u.loginName}）`}
-            value={employees.find((u) => u.id === employeeId) ?? null}
-            onChange={(_, v) => setEmployeeId(v ? v.id : null)}
+            value={selectedEmployee}
+            onChange={(_, v) => setSelectedEmployee(v)}
             renderInput={(params) => <TextField {...params} label="选择员工" size="small" />}
             sx={{ width: 320 }}
           />

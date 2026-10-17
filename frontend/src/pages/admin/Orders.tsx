@@ -30,7 +30,7 @@ import type { Order } from '@/types/order'
 import { formatMoney } from '@/utils/format'
 import { errMessage } from '@/utils/request'
 
-/** 订单管理（interfaces.md §6.4/§6.5/§6.6）权限：MANAGER、DELIVERER（删除仅 MANAGER） */
+
 export default function OrdersPage() {
   const { user } = useAuth()
   const canDelete = user?.role === 'MANAGER'
@@ -44,7 +44,6 @@ export default function OrdersPage() {
   const [deleteTarget, setDeleteTarget] = useState<Order | null>(null)
   const [deleting, setDeleting] = useState(false)
 
-  // 初始用餐日期取服务端「最近一个可订用餐日期」（interfaces.md §6.4 默认行为）
   useEffect(() => {
     getOrderStatus()
       .then((s) => {

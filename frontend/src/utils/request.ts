@@ -15,7 +15,7 @@ const instance = axios.create({
   // 开发环境经 Vite 代理访问后端；直连/部署场景可用 VITE_API_BASE 环境变量覆盖
   baseURL: import.meta.env.VITE_API_BASE ?? '/api',
   timeout: 15000,
-  // 会话基于 JSESSIONID Cookie（interfaces.md §0.3）
+
   withCredentials: true,
 })
 
@@ -30,7 +30,7 @@ instance.interceptors.response.use(
     }
     return response
   },
-  (error: AxiosError<ApiResponse<unknown>>) => {
+  async (error: AxiosError<ApiResponse<unknown> | Blob>) => {
     const status = error.response?.status
     const url = error.config?.url ?? ''
     // 未登录：后端登录拦截器直接返回 HTTP 401；登录/注册/me 接口除外，其余跳登录页
@@ -42,8 +42,13 @@ instance.interceptors.response.use(
     ) {
       window.location.href = '/login'
     }
+    let body = error.response?.data
+    if (body instanceof Blob) {
+      try { body = JSON.parse(await body.text()) as ApiResponse<unknown> }
+      catch { body = undefined }
+    }
     const msg =
-      error.response?.data?.msg ?? (status === 401 ? '未登录或会话已过期' : '网络异常，请稍后重试')
+      (body instanceof Blob ? undefined : body?.msg) ?? (status === 401 ? '未登录或会话已过期' : '网络异常，请稍后重试')
     return Promise.reject(new ApiError(status ?? -1, msg))
   },
 )

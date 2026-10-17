@@ -9,7 +9,7 @@ import { useSnackbar } from '@/hooks/useSnackbar'
 import type { BlanketOrder as BlanketOrderType } from '@/types/order'
 import { errMessage } from '@/utils/request'
 
-/** 总括订单（interfaces.md §6.7）：厨房主管备料汇总 + 打印，权限：CHEF（MANAGER 也可） */
+
 export default function BlanketOrderPage() {
   const { snackbar, showError } = useSnackbar()
   const [mealDate, setMealDate] = useState<Dayjs | null>(null)

@@ -9,7 +9,7 @@ import { useSnackbar } from '@/hooks/useSnackbar'
 import type { DeliveryOrder } from '@/types/order'
 import { errMessage } from '@/utils/request'
 
-/** 配餐打印（interfaces.md §6.8）：批量打印所有订单，权限：DELIVERER（MANAGER 也可） */
+
 export default function DeliveryOrdersPage() {
   const { snackbar, showError } = useSnackbar()
   const [mealDate, setMealDate] = useState<Dayjs | null>(null)

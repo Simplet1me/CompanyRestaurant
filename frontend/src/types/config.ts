@@ -1,4 +1,4 @@
-/** 系统参数（interfaces.md §8.1） */
+
 export interface SystemConfig {
   /** 订餐截止时间（HH:mm） */
   orderDeadline: string
