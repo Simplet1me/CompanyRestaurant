@@ -77,7 +77,8 @@ export default function LoginPage() {
           display: 'flex',
           flexDirection: 'column',
           gap: 2,
-          boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.04)',
+          borderRadius: '6px',
+          boxShadow: '0 16px 48px rgba(30, 64, 175, 0.08)',
         }}
       >
         <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
@@ -90,6 +91,9 @@ export default function LoginPage() {
         </Stack>
         <Typography component="h1" variant="h4" sx={{ fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}>
           {mode === 'login' ? '登录' : '注册'}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {mode === 'login' ? '登录账号，安排好每一天的午餐。' : '创建员工账号，开启便捷订餐。'}
         </Typography>
         {mode === 'login' ? (
           <LoginForm loading={loading} onSubmit={(params) => run(() => login(params))} />

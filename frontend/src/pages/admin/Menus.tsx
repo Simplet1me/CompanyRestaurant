@@ -251,7 +251,6 @@ function CreateMenuDialog({
               value={name}
               onChange={(e) => setName(e.target.value)}
               error={!!errors.name}
-              helperText={errors.name ?? '如：第 40 周菜单'}
               fullWidth
               required
               autoFocus

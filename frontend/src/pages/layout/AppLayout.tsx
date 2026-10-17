@@ -87,11 +87,22 @@ export default function AppLayout() {
   const drawerContent = (
     <>
       <BrandHeader />
-      <List>
+      <List sx={{ p: 1.5 }}>
         {visibleItems.map((item) => (
           <ListItemButton
             key={item.path}
             selected={location.pathname === item.path}
+            aria-current={location.pathname === item.path ? 'page' : undefined}
+            sx={{
+              borderRadius: 1, mb: 0.5, py: 1,
+              color: 'text.secondary',
+              '& .MuiListItemIcon-root': { minWidth: 38, color: 'inherit' },
+              '&.Mui-selected': {
+                bgcolor: 'primary.main', color: 'primary.contrastText',
+                '&:hover': { bgcolor: 'primary.dark' },
+                '& .MuiListItemText-primary': { fontWeight: 600 },
+              },
+            }}
             onClick={() => {
               navigate(item.path)
               setMobileOpen(false)
@@ -154,6 +165,10 @@ export default function AppLayout() {
             <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
               {currentTitle}
             </Typography>
+            <Box sx={{ display: { xs: 'none', sm: 'block' }, textAlign: 'right', mr: 1 }}>
+              <Typography variant="body2" sx={{ fontWeight: 600 }}>{user?.name}</Typography>
+              <Typography variant="caption" color="text.secondary">{user && ROLE_LABELS[user.role]}</Typography>
+            </Box>
             {/* 官方 App bar with menu 模式：头像按钮 + 下拉菜单 */}
             <Tooltip title={user?.name ?? ''}>
               <IconButton
@@ -192,7 +207,7 @@ export default function AppLayout() {
         </AppBar>
 
         {/* 内容区 */}
-        <Box sx={{ flexGrow: 1, p: { xs: 2, md: 3 } }}>
+        <Box sx={{ flexGrow: 1, width: '100%', maxWidth: 1440, mx: 'auto', p: { xs: 2, md: 3, lg: 4 } }}>
           <Outlet />
         </Box>
 
@@ -202,7 +217,7 @@ export default function AppLayout() {
           sx={{ py: 2, px: 3, borderTop: 1, borderColor: 'divider', textAlign: 'center' }}
         >
           <Typography variant="body2" color="text.secondary">
-            企业餐厅网络点餐系统 · Java Web 课程设计
+            企业餐厅网络点餐系统
           </Typography>
         </Box>
       </Box>

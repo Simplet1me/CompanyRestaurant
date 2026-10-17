@@ -132,6 +132,11 @@ export default function HomePage() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
+            gap: 2,
+            zIndex: 1,
+            border: 1,
+            borderColor: 'divider',
+            boxShadow: '0 6px 24px rgba(30, 41, 59, 0.10)',
           }}
         >
           <Typography>
@@ -190,10 +195,10 @@ function MenuItemCard({
 }) {
   const [imgError, setImgError] = useState(false)
   return (
-    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', borderColor: qty > 0 ? 'primary.main' : 'divider' }}>
       <Box
         sx={{
-          height: 140,
+          height: 180,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -214,11 +219,11 @@ function MenuItemCard({
         )}
       </Box>
       <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', gap: 1 }}>
-        <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
+        <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'space-between', gap: 1 }}>
           <Typography variant="subtitle1">{item.name}</Typography>
           <Chip label={item.classify} size="small" />
         </Stack>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="subtitle1" color="primary.main">
           {formatMoney(item.price)} / {item.unit}
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: 'auto' }}>
@@ -226,11 +231,11 @@ function MenuItemCard({
             数量（{item.unit}）
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-            <IconButton size="small" onClick={() => onQtyChange(qty - 1)} aria-label="减少">
+            <IconButton size="small" disabled={qty === 0} onClick={() => onQtyChange(qty - 1)} aria-label={`减少${item.name}`}>
               <RemoveIcon fontSize="small" />
             </IconButton>
             <Typography sx={{ minWidth: 24, textAlign: 'center' }}>{qty}</Typography>
-            <IconButton size="small" onClick={() => onQtyChange(qty + 1)} aria-label="增加">
+            <IconButton size="small" color="primary" sx={{ bgcolor: 'action.selected' }} onClick={() => onQtyChange(qty + 1)} aria-label={`增加${item.name}`}>
               <AddIcon fontSize="small" />
             </IconButton>
           </Box>

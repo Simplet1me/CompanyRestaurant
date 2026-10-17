@@ -65,8 +65,7 @@ export default function ConfigsPage() {
         系统配置
       </Typography>
       <Alert severity="info" sx={{ mb: 2 }}>
-        订餐规则：截止时间前可订当天午餐；配餐开始时间后可订次日午餐（interfaces.md §6.1 / requirements.md
-        §5.1）
+        订餐规则：截止时间前可订当天午餐；配餐开始时间后可订次日午餐
       </Alert>
       <Paper sx={{ p: 3, maxWidth: 560 }}>
         <Stack direction="row" spacing={3} sx={{ alignItems: 'center', mb: 3 }}>
