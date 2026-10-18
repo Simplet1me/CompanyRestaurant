@@ -1,0 +1,101 @@
+{
+  "images": {
+    "1": {
+      "url": "/uploads/image/4836f596-1b8b-4d1a-b43f-495c3b9e9687.jpeg",
+      "source": "rice.jpg",
+      "sha256": "2288ddd76d09f67151dd029a3b03a7a24f46a20c574963bac123399eefb83ec9"
+    },
+    "2": {
+      "url": "/uploads/image/f954fb16-287b-4045-a6cd-4daf20777920.jpeg",
+      "source": "fried-rice.jpg",
+      "sha256": "3543121b4f82800212ffe8b86e02202ef9fcf39fd8afca3b02333b167639ff80"
+    },
+    "3": {
+      "url": "/uploads/image/2b968cad-075a-4684-8db7-0aaa684d9bcf.jpeg",
+      "source": "kung-pao-chicken.jpg",
+      "sha256": "6ddadb7371971b4c576712659ae59fe2c6f12825537b14829ff0bbf8430cfd0f"
+    },
+    "4": {
+      "url": "/uploads/image/c5b28b9c-c5fe-421b-bf2b-5812e1012733.jpeg",
+      "source": "mapo-tofu.jpg",
+      "sha256": "1bcfa75c86af9fa78f1b65da625b491b1f29a572e2ae2a941bdfc793bc5c5b08"
+    },
+    "5": {
+      "url": "/uploads/image/75cd0c18-bee3-482b-baae-bb914ead7156.jpeg",
+      "source": "tomato-eggs.jpg",
+      "sha256": "b4b7cd009fe8032ccb6ec71debe20e0410ada4e7ead01cd79bcae5c63c29850a"
+    },
+    "6": {
+      "url": "/uploads/image/52008551-eb6b-411c-ac57-78b4b48e7b02.jpeg",
+      "source": "braised-pork.jpg",
+      "sha256": "fa3ec37edabde1583e1d1857cb97d7d9fae317fcae6f676c4d2e385f2d78ff94"
+    },
+    "7": {
+      "url": "/uploads/image/4f1c5852-00eb-44c7-84b1-f1906a9abd47.jpeg",
+      "source": "broccoli.jpg",
+      "sha256": "e1865d8d220f3adec0fb57a4187923378253a38da15faffafa52c6349b73a874"
+    },
+    "8": {
+      "url": "/uploads/image/3fd841c2-3a28-4b1b-8148-d0217b8a9090.jpeg",
+      "source": "egg-soup.jpg",
+      "sha256": "c15dafda8eabf18aed763882917a705be6df6a0c6d9df718c471ef8d4d9efbe5"
+    },
+    "9": {
+      "url": "/uploads/image/1d493fd0-b74c-46aa-a8ae-093ed0c2d958.jpeg",
+      "source": "fried-mantou.jpg",
+      "sha256": "9bc74cf2d6a656d4e2d619fb365bd96706a51634f7a3cc9ab428e7be6fcbd4cf"
+    },
+    "10": {
+      "url": "/uploads/image/c93b343d-5a56-4121-91dd-ed33be6c6e01.jpeg",
+      "source": "cucumber.jpg",
+      "sha256": "8d373f1dee54faacc574a0a2e1f9dcc89bd3f3e584dde41e52521ba40c6d141c"
+    }
+  },
+  "users": {
+    "manager": 7,
+    "chef": 8,
+    "deliverer": 9,
+    "finance": 10,
+    "employee01": 11,
+    "employee02": 12,
+    "employee03": 13
+  },
+  "recipes": {
+    "1": 4,
+    "2": 5,
+    "3": 6,
+    "4": 7,
+    "5": 8,
+    "6": 9,
+    "7": 10,
+    "8": 11,
+    "9": 12,
+    "10": 13
+  },
+  "menus": {
+    "经典家常菜单": 4,
+    "清爽轻食菜单": 5,
+    "周日午餐菜单": 6,
+    "周一精选菜单": 7
+  },
+  "orders": {
+    "2026-10-18/manager": 3,
+    "2026-10-18/chef": 4,
+    "2026-10-18/deliverer": 5,
+    "2026-10-18/finance": 6,
+    "2026-10-18/employee01": 7,
+    "2026-10-18/employee02": 8,
+    "2026-10-19/manager": 9,
+    "2026-10-19/chef": 10,
+    "2026-10-19/deliverer": 11,
+    "2026-10-19/finance": 12,
+    "2026-10-19/employee01": 13,
+    "2026-10-19/employee02": 14
+  },
+  "originalConfig": {
+    "orderDeadline": "09:00",
+    "serveStartTime": "11:30"
+  },
+  "verified": true,
+  "monthlyTotal": "319.3"
+}

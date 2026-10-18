@@ -1,0 +1,23 @@
+{
+  "dates": [
+    "2026-10-18",
+    "2026-10-19"
+  ],
+  "counts": {
+    "menu": 6,
+    "menu_items": 35,
+    "order_items": 48,
+    "orders": 14,
+    "recipe": 13,
+    "system_config": 2,
+    "user": 9
+  },
+  "dailyTotals": [
+    "150.00",
+    "147.50"
+  ],
+  "monthlyTotal": "319.30",
+  "employee01Total": "57.00",
+  "preservedOriginalData": true,
+  "pendingImportUsers": 5
+}

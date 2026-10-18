@@ -29,7 +29,7 @@ export default function ConfigsPage() {
   }, [showError])
 
   const handleSave = async () => {
-    if (!deadline || !serveStart) {
+    if (!deadline?.isValid() || !serveStart?.isValid()) {
       showError('请填写完整的时间参数')
       return
     }
@@ -75,6 +75,8 @@ export default function ConfigsPage() {
             onChange={setDeadline}
             format="HH:mm"
             ampm={false}
+            timeSteps={{ minutes: 1 }}
+            minutesStep={1}
             disabled={!isManager}
             slotProps={{ textField: { size: 'small' } }}
           />
@@ -84,6 +86,8 @@ export default function ConfigsPage() {
             onChange={setServeStart}
             format="HH:mm"
             ampm={false}
+            timeSteps={{ minutes: 1 }}
+            minutesStep={1}
             disabled={!isManager}
             slotProps={{ textField: { size: 'small' } }}
           />

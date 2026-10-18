@@ -1,0 +1,32 @@
+{
+  "baseDate": "2026-10-18",
+  "password": "123456",
+  "users": [
+    [1, "刘明", "manager", "13800001001", "餐饮管理部", "餐厅办公室101", "MANAGER"],
+    [2, "王建国", "chef", "13800001002", "后厨", "厨房操作间", "CHEF"],
+    [3, "赵小川", "deliverer", "13800001003", "配送组", "配餐台A区", "DELIVERER"],
+    [4, "陈静", "finance", "13800001004", "财务部", "行政楼203", "FINANCE"],
+    [5, "张伟", "employee01", "13800001005", "研发部", "研发楼A301-01", "EMPLOYEE"],
+    [6, "李娜", "employee02", "13800001006", "市场部", "办公楼B205-03", "EMPLOYEE"],
+    [7, "周晨", "employee03", "13800001007", "人事部", "行政楼202-05", "EMPLOYEE"]
+  ],
+  "importUsers": [
+    ["林悦", "import01", "123456", "13800002001", "研发部", "研发楼A302-01", "EMPLOYEE"],
+    ["许航", "import02", "123456", "13800002002", "研发部", "研发楼A302-02", "EMPLOYEE"],
+    ["宋佳", "import03", "123456", "13800002003", "市场部", "办公楼B206-01", "EMPLOYEE"],
+    ["何宇", "import04", "123456", "13800002004", "行政部", "行政楼201-03", "EMPLOYEE"],
+    ["唐宁", "import05", "123456", "13800002005", "采购部", "办公楼B101-02", "EMPLOYEE"]
+  ],
+  "recipes": [
+    {"id": 1, "name": "香软米饭", "unit": "碗", "classify": "主食", "price": "2.00", "image": "rice.jpg", "sourceTitle": "Steamed rice in bowl 01.jpg"},
+    {"id": 2, "name": "什锦炒饭", "unit": "份", "classify": "主食", "price": "9.00", "image": "fried-rice.jpg", "sourceTitle": "Chinese Fried Rice.JPG"},
+    {"id": 3, "name": "宫保鸡丁", "unit": "份", "classify": "菜肴", "price": "16.00", "image": "kung-pao-chicken.jpg", "sourceTitle": "Kung Pao Chicken with white rice.jpg"},
+    {"id": 4, "name": "麻婆豆腐", "unit": "份", "classify": "菜肴", "price": "8.00", "image": "mapo-tofu.jpg", "sourceTitle": "Mapo tofu.JPG"},
+    {"id": 5, "name": "番茄炒蛋", "unit": "份", "classify": "菜肴", "price": "10.00", "image": "tomato-eggs.jpg", "sourceTitle": "MyPlate gov Cultural Food (20241025-USDA-FNS-UNK-0084).jpg"},
+    {"id": 6, "name": "红烧肉", "unit": "份", "classify": "菜肴", "price": "20.00", "image": "braised-pork.jpg", "sourceTitle": "Red braised pork (20141106191221).JPG"},
+    {"id": 7, "name": "清炒西兰花", "unit": "份", "classify": "素菜", "price": "7.00", "image": "broccoli.jpg", "sourceTitle": "Stir-fried broccoli.jpg"},
+    {"id": 8, "name": "蛋花汤", "unit": "碗", "classify": "汤品", "price": "3.00", "image": "egg-soup.jpg", "sourceTitle": "Egg drop soup.jpg"},
+    {"id": 9, "name": "黄金小馒头", "unit": "个", "classify": "糕点", "price": "2.50", "image": "fried-mantou.jpg", "sourceTitle": "Deep-fried mantou.jpg"},
+    {"id": 10, "name": "凉拌黄瓜", "unit": "份", "classify": "凉菜", "price": "6.00", "image": "cucumber.jpg", "sourceTitle": "Asian Cucumber Salad.jpg"}
+  ]
+}

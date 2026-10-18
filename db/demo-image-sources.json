@@ -1,0 +1,112 @@
+[
+  {
+    "dish": "香软米饭",
+    "file": "rice.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Steamed_rice_in_bowl_01.jpg",
+    "downloadUrl": "https://upload.wikimedia.org/wikipedia/commons/7/77/Steamed_rice_in_bowl_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "author": "Anna Frodesiak",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sha256": "2288ddd76d09f67151dd029a3b03a7a24f46a20c574963bac123399eefb83ec9",
+    "changes": "无编辑；按来源提供的原图或缩略图下载"
+  },
+  {
+    "dish": "什锦炒饭",
+    "file": "fried-rice.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Chinese_Fried_Rice.JPG",
+    "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/12/Chinese_Fried_Rice.JPG/960px-Chinese_Fried_Rice.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Miansari66",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sha256": "3543121b4f82800212ffe8b86e02202ef9fcf39fd8afca3b02333b167639ff80",
+    "changes": "无编辑；按来源提供的原图或缩略图下载"
+  },
+  {
+    "dish": "宫保鸡丁",
+    "file": "kung-pao-chicken.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Kung_Pao_Chicken_with_white_rice.jpg",
+    "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Kung_Pao_Chicken_with_white_rice.jpg/960px-Kung_Pao_Chicken_with_white_rice.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Wheeler Cowperthwaite",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sha256": "6ddadb7371971b4c576712659ae59fe2c6f12825537b14829ff0bbf8430cfd0f",
+    "changes": "无编辑；按来源提供的原图或缩略图下载"
+  },
+  {
+    "dish": "麻婆豆腐",
+    "file": "mapo-tofu.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Mapo_tofu.JPG",
+    "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Mapo_tofu.JPG/960px-Mapo_tofu.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Yaoleilei",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "sha256": "1bcfa75c86af9fa78f1b65da625b491b1f29a572e2ae2a941bdfc793bc5c5b08",
+    "changes": "无编辑；按来源提供的原图或缩略图下载"
+  },
+  {
+    "dish": "番茄炒蛋",
+    "file": "tomato-eggs.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:MyPlate_gov_Cultural_Food_(20241025-USDA-FNS-UNK-0084).jpg",
+    "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/MyPlate_gov_Cultural_Food_%2820241025-USDA-FNS-UNK-0084%29.jpg/960px-MyPlate_gov_Cultural_Food_%2820241025-USDA-FNS-UNK-0084%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "USDAgov",
+    "license": "Public domain",
+    "licenseUrl": "",
+    "sha256": "b4b7cd009fe8032ccb6ec71debe20e0410ada4e7ead01cd79bcae5c63c29850a",
+    "changes": "无编辑；按来源提供的原图或缩略图下载"
+  },
+  {
+    "dish": "红烧肉",
+    "file": "braised-pork.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Red_braised_pork_(20141106191221).JPG",
+    "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4e/Red_braised_pork_%2820141106191221%29.JPG/960px-Red_braised_pork_%2820141106191221%29.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "N509FZ",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sha256": "fa3ec37edabde1583e1d1857cb97d7d9fae317fcae6f676c4d2e385f2d78ff94",
+    "changes": "无编辑；按来源提供的原图或缩略图下载"
+  },
+  {
+    "dish": "清炒西兰花",
+    "file": "broccoli.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Stir-fried_broccoli.jpg",
+    "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4d/Stir-fried_broccoli.jpg/960px-Stir-fried_broccoli.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Fumikas Sagisavas",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sha256": "e1865d8d220f3adec0fb57a4187923378253a38da15faffafa52c6349b73a874",
+    "changes": "无编辑；按来源提供的原图或缩略图下载"
+  },
+  {
+    "dish": "蛋花汤",
+    "file": "egg-soup.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Egg_drop_soup.jpg",
+    "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Egg_drop_soup.jpg/960px-Egg_drop_soup.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Stu Spivack (stu_spivack)",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "sha256": "c15dafda8eabf18aed763882917a705be6df6a0c6d9df718c471ef8d4d9efbe5",
+    "changes": "无编辑；按来源提供的原图或缩略图下载"
+  },
+  {
+    "dish": "黄金小馒头",
+    "file": "fried-mantou.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Deep-fried_mantou.jpg",
+    "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/59/Deep-fried_mantou.jpg/960px-Deep-fried_mantou.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "CNEcija12345",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sha256": "9bc74cf2d6a656d4e2d619fb365bd96706a51634f7a3cc9ab428e7be6fcbd4cf",
+    "changes": "无编辑；按来源提供的原图或缩略图下载"
+  },
+  {
+    "dish": "凉拌黄瓜",
+    "file": "cucumber.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Asian_Cucumber_Salad.jpg",
+    "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b4/Asian_Cucumber_Salad.jpg/960px-Asian_Cucumber_Salad.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "author": "Thegreatmutata",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sha256": "8d373f1dee54faacc574a0a2e1f9dcc89bd3f3e584dde41e52521ba40c6d141c",
+    "changes": "无编辑；按来源提供的原图或缩略图下载"
+  }
+]
