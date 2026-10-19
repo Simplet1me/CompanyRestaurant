@@ -14,6 +14,8 @@ export const createMenu = (data: CreateMenuParams) => http.post<MenuDetail>('/me
 
 export const getMenu = (id: number) => http.get<MenuDetail>(`/menus/${id}`)
 
+export const renameMenu = (id: number, name: string) => http.put<null>(`/menus/${id}/name`, { name })
+
 
 export const addMenuItems = (id: number, recipeIds: number[]) =>
   http.post<MenuDetail>(`/menus/${id}/items`, { recipeIds })

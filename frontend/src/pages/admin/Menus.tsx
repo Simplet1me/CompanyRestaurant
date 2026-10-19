@@ -34,6 +34,7 @@ import {
   deleteMenuItem,
   getMenu,
   listMenus,
+  renameMenu,
   updateMenuItemPrice,
 } from '@/api/menu'
 import { listRecipes } from '@/api/recipe'
@@ -53,6 +54,10 @@ export default function MenusPage() {
   const [pageSize, setPageSize] = useState(10)
   const [loading, setLoading] = useState(false)
   const [createOpen, setCreateOpen] = useState(false)
+  const [renameTarget, setRenameTarget] = useState<MenuSummary | null>(null)
+  const [renameValue, setRenameValue] = useState('')
+  const [renameError, setRenameError] = useState('')
+  const [renaming, setRenaming] = useState(false)
   const [detailId, setDetailId] = useState<number | null>(null)
   const [activateTarget, setActivateTarget] = useState<MenuSummary | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<MenuSummary | null>(null)
@@ -69,6 +74,27 @@ export default function MenusPage() {
   useEffect(() => {
     load()
   }, [load])
+
+  const handleRename = async (e: FormEvent) => {
+    e.preventDefault()
+    if (!renameTarget || renaming) return
+    const name = renameValue.trim()
+    if (!name || name.length > 100) {
+      setRenameError(!name ? '请输入菜单名称' : '菜单名称不能超过100个字符')
+      return
+    }
+    setRenaming(true)
+    try {
+      await renameMenu(renameTarget.id, name)
+      setRenameTarget(null)
+      showSuccess('菜单名称已更新')
+      load()
+    } catch (e) {
+      showError(errMessage(e))
+    } finally {
+      setRenaming(false)
+    }
+  }
 
   const handleActivate = async () => {
     if (!activateTarget) return
@@ -136,6 +162,13 @@ export default function MenusPage() {
                   <Button size="small" onClick={() => setDetailId(m.id)}>
                     详情
                   </Button>
+                  <Button size="small" onClick={() => {
+                    setRenameTarget(m)
+                    setRenameValue(m.name)
+                    setRenameError('')
+                  }}>
+                    修改名称
+                  </Button>
                   {m.status !== 'USE' && (
                     <Button size="small" color="primary" onClick={() => setActivateTarget(m)}>
                       启用
@@ -172,6 +205,32 @@ export default function MenusPage() {
         />
       </TableContainer>
 
+      <Dialog open={!!renameTarget} onClose={() => { if (!renaming) setRenameTarget(null) }} maxWidth="xs" fullWidth>
+        <Box component="form" onSubmit={handleRename}>
+          <DialogTitle>修改菜单名称</DialogTitle>
+          <DialogContent>
+            <TextField
+              label="菜单名称"
+              value={renameValue}
+              onChange={(e) => { setRenameValue(e.target.value); setRenameError('') }}
+              error={!!renameError}
+              helperText={renameError || '最多100个字符'}
+              slotProps={{ htmlInput: { maxLength: 100 } }}
+              disabled={renaming}
+              fullWidth
+              required
+              autoFocus
+              sx={{ mt: 1 }}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button disabled={renaming} onClick={() => setRenameTarget(null)}>取消</Button>
+            <Button type="submit" variant="contained" disabled={renaming}>
+              {renaming ? <CircularProgress size={24} color="inherit" /> : '保存'}
+            </Button>
+          </DialogActions>
+        </Box>
+      </Dialog>
       <CreateMenuDialog
         open={createOpen}
         onClose={() => setCreateOpen(false)}

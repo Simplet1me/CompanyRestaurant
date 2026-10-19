@@ -20,6 +20,8 @@ public interface MenuService {
 
     MenuVO getDetail(Long id);
 
+    void rename(Long id, String name);
+
     /** 创建菜单：菜品从食谱快照复制，旧使用中菜单自动转历史，新菜单即启用 */
     MenuVO create(MenuCreateDTO dto);
 

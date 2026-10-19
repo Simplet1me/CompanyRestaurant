@@ -58,6 +58,12 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    public void rename(Long id, String name) {
+        requireMenu(id);
+        menuMapper.updateName(id, name.strip());
+    }
+
+    @Override
     @Transactional
     public MenuVO create(MenuCreateDTO dto) {
         // 更换菜单：旧使用中菜单转历史，新菜单即启用

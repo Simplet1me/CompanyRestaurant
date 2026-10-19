@@ -6,6 +6,7 @@ import com.simplet1me.companyrestaurant.common.Result;
 import com.simplet1me.companyrestaurant.entity.Menu;
 import com.simplet1me.companyrestaurant.entity.Role;
 import com.simplet1me.companyrestaurant.model.dto.MenuCreateDTO;
+import com.simplet1me.companyrestaurant.model.dto.MenuRenameDTO;
 import com.simplet1me.companyrestaurant.model.dto.PriceDTO;
 import com.simplet1me.companyrestaurant.model.dto.RecipeIdsDTO;
 import com.simplet1me.companyrestaurant.model.vo.MenuVO;
@@ -31,6 +32,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class MenuController {
 
     private final MenuService menuService;
+
+    @PutMapping("/{id}/name")
+    @RequireRole(Role.MANAGER)
+    public Result<Void> rename(@PathVariable Long id, @Valid @RequestBody MenuRenameDTO dto) {
+        menuService.rename(id, dto.getName());
+        return Result.success();
+    }
 
     /** 菜单列表（含历史，分页） */
     @GetMapping

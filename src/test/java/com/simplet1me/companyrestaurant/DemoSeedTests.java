@@ -66,6 +66,17 @@ class DemoSeedTests {
                 assertEquals(48, count("order_items"));
             }
             assertEquals(1, jdbc.queryForObject("SELECT COUNT(*) FROM menu WHERE status='USE'", Integer.class));
+            assertEquals("09:00", configs.getConfig().getOrderDeadline());
+            assertEquals("11:30", configs.getConfig().getServeStartTime());
+            assertEquals(0, jdbc.queryForObject("SELECT COUNT(*) FROM user WHERE login_name IN ('import01','import02','import03','import04','import05')", Integer.class));
+            assertNoRows("SELECT COUNT(*) FROM user WHERE update_time < create_time");
+            assertNoRows("SELECT COUNT(*) FROM recipe WHERE update_time < create_time");
+            assertNoRows("SELECT COUNT(*) FROM menu_items i JOIN menu m ON m.id=i.menu_id JOIN recipe r ON r.id=i.recipe_id WHERE i.create_time < m.create_time OR i.create_time < r.create_time");
+            assertNoRows("SELECT COUNT(*) FROM orders o JOIN user u ON u.id=o.user_id WHERE o.create_time <= u.create_time");
+            assertNoRows("SELECT COUNT(*) FROM order_items d JOIN orders o ON o.id=d.order_id JOIN menu_items i ON i.id=d.menu_item_id WHERE o.create_time < i.create_time");
+            assertNoRows("SELECT COUNT(*) FROM orders WHERE TIME(create_time) >= '09:00:00' AND TIME(create_time) < '11:30:00'");
+            assertNoRows("SELECT COUNT(*) FROM orders WHERE meal_date <> CASE WHEN TIME(create_time) < '09:00:00' THEN DATE(create_time) ELSE DATE_ADD(DATE(create_time), INTERVAL 1 DAY) END");
+            assertNoRows("SELECT COUNT(*) FROM order_items WHERE amount <> price * qty");
             assertEquals(0, jdbc.queryForObject("SELECT COUNT(*) FROM orders WHERE user_id=(SELECT id FROM user WHERE login_name='employee03')", Integer.class));
             assertEquals(0, jdbc.queryForObject("SELECT COUNT(*) FROM orders o WHERE o.total_price <> (SELECT SUM(i.amount) FROM order_items i WHERE i.order_id=o.id)", Integer.class));
             for (String login : new String[]{"manager", "chef", "deliverer", "finance", "employee01", "employee02", "employee03"}) {
@@ -96,4 +107,8 @@ class DemoSeedTests {
     }
 
     private int count(String table) { return jdbc.queryForObject("SELECT COUNT(*) FROM `" + table + "`", Integer.class); }
+
+    private void assertNoRows(String sql) {
+        assertEquals(0, jdbc.queryForObject(sql, Integer.class), sql);
+    }
 }

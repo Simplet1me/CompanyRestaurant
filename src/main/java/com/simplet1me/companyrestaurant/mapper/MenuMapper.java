@@ -23,6 +23,8 @@ public interface MenuMapper {
 
     int deleteById(@Param("id") Long id);
 
+    int updateName(@Param("id") Long id, @Param("name") String name);
+
     /** 将所有 USE 菜单转为 HISTORY（启用新菜单时调用） */
     int updateStatusWhereUse(@Param("status") String status);
 
