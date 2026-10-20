@@ -49,6 +49,7 @@ public class UserImportService {
         return ExcelUtil.download("用户批量导入模板", workbook);
     }
 
+    // 导入excel
     public ImportResult importUsers(MultipartFile file) {
         String name = file.getOriginalFilename() == null ? "" : file.getOriginalFilename().toLowerCase(Locale.ROOT);
         if (file.isEmpty() || file.getSize() > 10 * 1024 * 1024 || !(name.endsWith(".xlsx") || name.endsWith(".xls"))) {

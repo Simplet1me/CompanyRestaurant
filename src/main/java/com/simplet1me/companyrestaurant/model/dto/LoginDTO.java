@@ -15,6 +15,5 @@ public class LoginDTO {
     @NotBlank(message = "密码不能为空")
     private String password;
 
-    /** 记住我（选做，暂未启用） */
     private Boolean rememberMe;
 }

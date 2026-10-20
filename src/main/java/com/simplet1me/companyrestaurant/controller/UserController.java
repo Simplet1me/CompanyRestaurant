@@ -39,12 +39,14 @@ public class UserController {
     private final UserService userService;
     private final UserImportService userImportService;
 
+    // 模板下载
     @GetMapping("/import/template")
     @RequireRole(Role.MANAGER)
     public ResponseEntity<byte[]> importTemplate() throws IOException {
         return userImportService.template();
     }
 
+    // 模板导入
     @PostMapping("/import")
     @RequireRole(Role.MANAGER)
     public Result<UserImportService.ImportResult> importUsers(@RequestParam("file") MultipartFile file) {

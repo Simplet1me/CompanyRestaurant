@@ -25,21 +25,27 @@ public class RoleInterceptor implements HandlerInterceptor {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
+    // 对请求进行拦截，检查是否符合权限
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         if (!(handler instanceof HandlerMethod handlerMethod)) {
             return true;
         }
+
+        // 放行普通接口，所有人允许访问
         RequireRole requireRole = handlerMethod.getMethodAnnotation(RequireRole.class);
-        // 未声明角色要求：任何登录用户均可访问
         if (requireRole == null) {
             return true;
         }
+
+        // 获取用户的权限
         LoginUserVO loginUser = SessionUtil.getLoginUser(request.getSession(false));
+        // 与接口允许的权限进行对比，如果正确，放行请求
         if (loginUser != null && hasRole(loginUser.getRole(), requireRole.value())) {
             return true;
         }
+
         response.setStatus(ResultCode.FORBIDDEN);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
@@ -49,6 +55,7 @@ public class RoleInterceptor implements HandlerInterceptor {
     }
 
     private boolean hasRole(String userRole, Role[] allowedRoles) {
+        // 先进行合法性检查，在进行对比
         try {
             Role role = Role.valueOf(userRole);
             return Arrays.asList(allowedRoles).contains(role);

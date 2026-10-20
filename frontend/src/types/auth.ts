@@ -4,7 +4,6 @@ import type { User } from './common'
 export interface LoginParams {
   loginName: string
   password: string
-  /** 记住我（选做，默认 false） */
   rememberMe?: boolean
 }
 
