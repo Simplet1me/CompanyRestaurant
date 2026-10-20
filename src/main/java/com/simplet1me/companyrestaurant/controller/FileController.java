@@ -33,13 +33,16 @@ public class FileController {
         this.bucket = bucket;
     }
 
+    // 文件上传
     @PostMapping("/api/files/upload/image")
     @RequireRole({Role.MANAGER, Role.CHEF})
     public Result<Map<String, String>> upload(@RequestParam("file") MultipartFile file) throws Exception {
         if (file.isEmpty() || file.getSize() > 5 * 1024 * 1024) throw new BusinessException("请选择不超过5MB的图片");
         byte[] bytes = file.getBytes();
         String type = imageType(bytes);
+        // UUID 重命名，防止用户上传的图片名字重复
         String name = UUID.randomUUID() + "." + type;
+        // 调用Minio接口，上传文件
         try (var input = new ByteArrayInputStream(bytes)) {
             client.putObject(PutObjectArgs.builder().bucket(bucket).object("images/" + name)
                     .stream(input, bytes.length, -1).contentType("image/" + type).build());
@@ -60,6 +63,7 @@ public class FileController {
         }
     }
 
+    // 通过编码判断文件类型
     static String imageType(byte[] b) {
         if (b.length >= 12) {
             if ((b[0] & 255) == 255 && (b[1] & 255) == 216 && (b[2] & 255) == 255) return "jpeg";

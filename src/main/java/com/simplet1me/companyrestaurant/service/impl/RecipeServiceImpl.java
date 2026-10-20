@@ -28,19 +28,24 @@ public class RecipeServiceImpl implements RecipeService {
         pageNum = Math.max(pageNum, 1);
         pageSize = Math.min(Math.max(pageSize, 1), 100);
         int offset = (pageNum - 1) * pageSize;
+        // 关键词查询
         long total = recipeMapper.countByCond(keyword, classify);
+        // 调用Mapper 查询食谱
         List<Recipe> list = recipeMapper.pageList(keyword, classify, offset, pageSize);
         return PageResult.of(total, list);
     }
 
     @Override
     public Recipe create(RecipeDTO dto) {
+        // DTO传参
         Recipe recipe = new Recipe();
         recipe.setName(dto.getName());
         recipe.setPhoto(dto.getPhoto());
         recipe.setUnit(dto.getUnit());
         recipe.setClassify(dto.getClassify());
         recipe.setPrice(dto.getPrice());
+
+        // 插入数据库
         recipeMapper.insert(recipe);
         log.info("新增菜品: id={}, name={}", recipe.getId(), recipe.getName());
         return recipe;

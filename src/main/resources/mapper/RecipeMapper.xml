@@ -17,10 +17,12 @@
         id, name, photo, unit, classify, price, create_time, update_time
     </sql>
 
+<!--    动态分页查询-->
     <select id="pageList" resultMap="recipeMap">
         SELECT <include refid="baseColumns"/>
         FROM recipe
         <where>
+#             都是空的 默认查询所有菜品
             <if test="keyword != null and keyword != ''">
                 AND name LIKE CONCAT('%', #{keyword}, '%')
             </if>

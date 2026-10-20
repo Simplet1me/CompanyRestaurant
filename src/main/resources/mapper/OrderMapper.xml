@@ -30,13 +30,17 @@
         WHERE user_id = #{userId} AND meal_date = #{mealDate}
     </select>
 
+    <!--分页查询，动态SQL-->
     <select id="pageList" resultMap="orderMap">
         SELECT <include refid="baseColumns"/>
         FROM orders
         <where>
+#             用户ID，如果为空就查询所有用户的订单
             <if test="userId != null">
                 AND user_id = #{userId}
             </if>
+
+#             下单日期，按日期查询
             <if test="mealDate != null">
                 AND meal_date = #{mealDate}
             </if>

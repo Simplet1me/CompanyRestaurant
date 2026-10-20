@@ -31,6 +31,7 @@ public class RecipeController {
     private final RecipeService recipeService;
 
     /** 食谱列表（分页） */
+    // 四个参数 页码 页大小 关键词 类型
     @GetMapping
     public Result<PageResult<Recipe>> pageList(@RequestParam(defaultValue = "1") int pageNum,
                                                @RequestParam(defaultValue = "10") int pageSize,
@@ -38,6 +39,7 @@ public class RecipeController {
                                                @RequestParam(required = false) String classify) {
         return Result.success(recipeService.pageList(pageNum, pageSize, keyword, classify));
     }
+
 
     /** 新增菜品 */
     @PostMapping

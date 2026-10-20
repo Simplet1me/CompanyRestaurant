@@ -45,7 +45,7 @@ public class OrderController {
         return Result.success(orderService.getStatus());
     }
 
-    /** 下单（用餐日期由服务端按时间窗口计算） */
+    // 订餐接口
     @PostMapping
     public Result<OrderVO> create(@Valid @RequestBody OrderCreateDTO dto, HttpSession session) {
         LoginUserVO loginUser = SessionUtil.getLoginUser(session);
@@ -63,10 +63,11 @@ public class OrderController {
         return Result.success(orderService.mine(loginUser.getId(), mealDate, pageNum, pageSize));
     }
 
-    /** 订单查询（按用餐日期，经理/配餐员用） */
+    // 订单分页查询
     @GetMapping
     @RequireRole({Role.MANAGER, Role.DELIVERER})
     public Result<PageResult<OrderVO>> pageList(
+            // 三个参数 日期，页码，页大小（一页里面有几条数据）
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate mealDate,
             @RequestParam(defaultValue = "1") int pageNum,
             @RequestParam(defaultValue = "100") int pageSize) {
@@ -88,7 +89,7 @@ public class OrderController {
         return Result.success();
     }
 
-    /** 总括订单（厨房主管备料汇总） */
+    // 总括订单
     @GetMapping("/blanket")
     @RequireRole({Role.CHEF, Role.MANAGER})
     public Result<BlanketOrderVO> blanket(

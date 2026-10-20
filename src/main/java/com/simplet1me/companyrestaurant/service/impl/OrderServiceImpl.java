@@ -56,6 +56,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderStatusVO getStatus() {
         LocalTime now = LocalTime.now();
+
+        // 从M13 系统配置模块拉来业务参数
         LocalTime deadline = configService.getOrderDeadline();
         LocalTime serveStart = configService.getServeStartTime();
 
@@ -63,6 +65,10 @@ public class OrderServiceImpl implements OrderService {
         vo.setDeadline(deadline.toString());
         vo.setServeStartTime(serveStart.toString());
 
+        // 主要判断逻辑
+        // 判断是否下单时间
+        // 9点之前，当天午餐
+        // 11.30之后，次日午餐
         if (now.isBefore(deadline)) {
             vo.setCanOrder(true);
             vo.setMealDate(LocalDate.now());
@@ -78,7 +84,10 @@ public class OrderServiceImpl implements OrderService {
 
     /** 计算当前可订的用餐日期；不在窗口内时抛出业务异常 */
     private LocalDate resolveMealDate() {
+        // 获取下单状态
         OrderStatusVO status = getStatus();
+
+        // 业务时间判断
         if (!Boolean.TRUE.equals(status.getCanOrder())) {
             throw new BusinessException("当前不在订餐时间窗口内：" + status.getReason());
         }
@@ -88,9 +97,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderVO create(OrderCreateDTO dto, LoginUserVO loginUser) {
+
+
+        // 计算完成后获取订餐时间，如果没有这个时间，就直接拒绝
         LocalDate mealDate = resolveMealDate();
 
-        // 每个员工每个用餐日期只生成一张订单
+        // 每个员工每个用餐日期只生成一张订单 重复性检查
         if (orderMapper.findByUserIdAndMealDate(loginUser.getId(), mealDate) != null) {
             throw new BusinessException("该用餐日期已下过单");
         }
@@ -145,15 +157,18 @@ public class OrderServiceImpl implements OrderService {
         pageSize = Math.min(Math.max(pageSize, 1), 100);
         int offset = (pageNum - 1) * pageSize;
         long total = orderMapper.countByCond(userId, mealDate);
+        // Mapper 层对接数据库
         List<OrderVO> list = orderMapper.pageList(userId, mealDate, offset, pageSize).stream()
                 .map(this::toVO).toList();
         return PageResult.of(total, list);
     }
 
+    // 分页查询
     @Override
     public PageResult<OrderVO> pageList(LocalDate mealDate, int pageNum, int pageSize) {
         // 未指定用餐日期时默认取"最近一个可订用餐日期"
         LocalDate targetDate = mealDate != null ? mealDate : getStatus().getMealDate();
+        //           设置为空↓ 查询所有用户的订单
         return mine(null, targetDate, pageNum, pageSize);
     }
 
@@ -178,15 +193,24 @@ public class OrderServiceImpl implements OrderService {
         log.info("经理删除订单: orderId={}, userId={}, mealDate={}", id, order.getUserId(), order.getMealDate());
     }
 
+    // 总括订单业务层
     @Override
     public BlanketOrderVO blanket(LocalDate mealDate) {
+        // 判断日期
         LocalDate targetDate = mealDate != null ? mealDate : getStatus().getMealDate();
         BlanketOrderVO vo = new BlanketOrderVO();
+        // 设置订餐日期
         vo.setMealDate(targetDate);
+
+        // 设置订餐员工数
         vo.setItems(orderItemMapper.sumGroupBy(null, targetDate, targetDate));
+
+        // 设置菜品集合 告诉厨师要做多少菜
         vo.setTotalEmployeeCount(orderMapper.findByMealDate(targetDate).stream()
                 .filter(o -> Order.STATUS_VALID.equals(o.getStatus()))
                 .map(Order::getUserId).distinct().count());
+
+
         return vo;
     }
 

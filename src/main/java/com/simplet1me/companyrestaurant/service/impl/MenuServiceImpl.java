@@ -123,12 +123,19 @@ public class MenuServiceImpl implements MenuService {
         log.info("删除菜单: id={}, name={}", id, menu.getName());
     }
 
+    // 启用/停用菜单
     @Override
     @Transactional
     public MenuVO activate(Long id) {
+        // 菜单ID
         Menu menu = requireMenu(id);
+
+        // 先将所有菜单转为历史菜单
         menuMapper.updateStatusWhereUse(Menu.STATUS_HISTORY);
+        // 再将传入的菜单启用
         menuMapper.updateStatusById(id, Menu.STATUS_USE);
+
+        // 设置启用 构造Vo
         menu.setStatus(Menu.STATUS_USE);
         log.info("启用菜单: id={}, name={}", id, menu.getName());
         return toVO(menu);
